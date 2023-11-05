@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta name="color-scheme" content="light dark">
+    <title>Hwanseo Choi - About</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css">
+    <style>
+      /* dark mode background */
+      @media (prefers-color-scheme: dark) {
+        body { background-color: #0d1117; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!--
+      Tailwind utility cheat‑sheet (used in this file)
+      ──────────────────────────────────────────────
+      w-full            → width: 100%
+      max-w-5xl         → max-width ~ 64rem (narrower than default breakpoint)
+      mx-auto           → center block horizontally with auto margins
+      h-16              → height: 4 rem
+      flex              → display: flex
+      items-center      → align-items: center (vertical align in flex row)
+      justify-between   → space-between distribution in flex row
+      px-3              → horizontal padding 0.75 rem
+      px-4              → horizontal padding 1 rem
+      py-2              → vertical padding 0.5 rem
+      py-8              → vertical padding 2 rem
+      sm:px-6           → padding 1.5 rem from the sm breakpoint and up
+      gap-6             → gap 1.5 rem between flex children
+      text-sm           → font-size 0.875 rem / line-height 1.25 rem
+      text-lg           → font‑size 1.125 rem / line-height 1.75 rem
+      font-medium       → font-weight 500
+      font-semibold     → font-weight 600
+      border-b          → bottom border 1 px (currentColor)
+      shadow-sm         → small box‑shadow
+      rounded-md        → border‑radius 0.375 rem
+    -->
+
+    <!-- Navbar -->
+    <script src="https://cdn.jsdelivr.net/npm/octicons@8.5.0/index.min.js"></script>
+    <nav class="w-full py-0 border-b shadow-sm">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 flex h-16 items-center justify-between">
+        <a href="/" class="text-lg font-bold">Hwanseo Choi</a>
+        <ul class="flex gap-6 text-sm font-medium">
+          <li><a href="/" class="px-3 py-2">About</a></li>
+          <li><a href="/blog" class="px-3 py-2">Blog</a></li>
+          <li><a href="https://github.com/hwanseoc" class="px-3 py-2">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="w-full pt-8">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6">
+        <article class="markdown-body">
+          
+<p align="center">
+  <a target="_blank" rel="noopener noreferrer" href="index-hwanseoc-small.png"><img src="index-hwanseoc-small.png" alt="Profile Photo" width="300" height="300" style="max-width: 100%;"></a>
+</p>
+<h1>Hello! 👋</h1>
+<p>My name is <strong>Hwanseo Choi</strong>. I'm a <strong><a href="https://www.nvidia.com/en-us/deep-learning-ai/technologies/cudnn/" rel="nofollow">cuDNN Library</a> Engineer at NVIDIA</strong> in Santa Clara, California, where I work on cutting-edge deep learning infrastructure and GPU-accelerated computing.</p>
+<h3>💼 Experience</h3>
+<ul>
+<li>
+<p><strong>Deep Learning Library Software Engineer @ <a href="https://www.nvidia.com" rel="nofollow">NVIDIA</a></strong><br>
+→ Added depthwise convolution kernels to <a href="https://www.nvidia.com/en-us/deep-learning-ai/technologies/cudnn/" rel="nofollow">cuDNN</a>, developed C++/Python frontend for Scaled-Dot Product Attention, expanded testing and reference for multiple variants, and helped integrate cuDNN Scaled-Dot Product Attention into various deep learning frameworks such as PyTorch, JAX, and TransformerEngine.</p>
+</li>
+<li>
+<p><strong>Course Assistant @ <a href="https://illinois.edu" rel="nofollow">UIUC</a></strong><br>
+→ Developed autograders, created documentation, held office hours, and graded programming assignments for ECE 220: Introduction to Computer Systems.</p>
+</li>
+</ul>
+<h3>🎓 Education</h3>
+<ul>
+<li>I received my <strong>Bachelor of Science in Computer Engineering</strong> from the <strong>University of Illinois at Urbana-Champaign</strong>. My coursework included topics in parallel programming, artificial intelligence, operating systems, computer architecture, digital systems, and interactive graphics.</li>
+</ul>
+<h3>🧪 Projects</h3>
+<ul>
+<li><strong><a href="https://github.com/hwanseoc/mxnet-convolution">MXNet Convolution</a></strong> — CUDA kernel optimization and convolution operator extension; won first place in performance competition</li>
+<li><strong>Dancing Altera Revolution</strong> — DDR-style game on Altera NIOS II FPGA using VGA &amp; sound card drivers</li>
+<li><strong><a href="https://github.com/hwanseoc/ray-tracer">Ray Tracing with BVH</a></strong> — 3D ray tracer in C++ with GLM, 10× speedup using BVH (binary space partitioning)</li>
+<li><strong><a href="https://github.com/hwanseoc/tpt-public">Twitch Prediction Tools</a></strong> — Bot using Twitch GraphQL + Riot API to predict match outcomes and farm points</li>
+<li><strong><a href="https://github.com/hwanseoc/chess-vision">Live Chess Analyzer</a></strong> — Converts screenshots into FEN, overlays engine evaluations visually in real time</li>
+</ul>
+<h3>🛠 Skills</h3>
+<ul>
+<li>Linux, C/C++, Python, PyTorch, CUDA, cuBLAS, cuDNN, CMake, Docker</li>
+</ul>
+<h3>🌍 Languages</h3>
+<ul>
+<li>English and Korean</li>
+</ul>
+<h3>📫 Contact</h3>
+<ul>
+<li><a href="https://hwanseoc.com" rel="nofollow">Portfolio</a></li>
+<li><a href="https://hwanseoc.com/blog" rel="nofollow">Blog</a></li>
+<li><a href="https://www.linkedin.com/in/hwanseoc" rel="nofollow">LinkedIn</a></li>
+<li><a href="https://github.com/hwanseoc">GitHub</a></li>
+<li><a href="https://x.com/hwanseochoi" rel="nofollow">X</a></li>
+</ul>
+<p>You can ask me anything (within reason). I'm always interested in discussing deep learning, GPU computing, and other technical topics!</p>
+<hr>
+
+        </article>
+      </div>
+    </main>
+
+  </body>
+</html>
