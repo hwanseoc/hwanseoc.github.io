@@ -36,7 +36,7 @@ My name is **Hwanseo Choi**. I'm a **[cuDNN Library](https://www.nvidia.com/en-u
 
 * English and Korean
 
-### 📫 Contact
+### 📫 Links
 - [Portfolio](https://hwanseoc.com)
 - [Blog](https://hwanseoc.com/blog)
 - [LinkedIn](https://www.linkedin.com/in/hwanseoc)
