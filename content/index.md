@@ -11,7 +11,7 @@ My name is **Hwanseo Choi**. I'm a **[cuDNN Library](https://www.nvidia.com/en-u
 ### 💼 Experience
 
 * **Deep Learning Library Software Engineer @ [NVIDIA](https://www.nvidia.com)**  
-  → Added depthwise convolution kernels to [cuDNN](https://www.nvidia.com/en-us/deep-learning-ai/technologies/cudnn/), developed C++/Python frontend for Scaled-Dot Product Attention, expanded testing and reference for multiple variants, and helped integrate cuDNN Scaled-Dot Product Attention into various deep learning frameworks such as PyTorch, JAX, and TransformerEngine.
+  → Added depthwise convolution kernels to [cuDNN](https://www.nvidia.com/en-us/deep-learning-ai/technologies/cudnn/), contributed to C++/Python frontend for Scaled-Dot Product Attention, expanded testing and reference for multiple variants, and helped integrate cuDNN Scaled-Dot Product Attention into various deep learning frameworks such as PyTorch, JAX, and TransformerEngine.
 
 * **Course Assistant @ [UIUC](https://illinois.edu)**  
   → Developed autograders, created documentation, held office hours, and graded programming assignments for ECE 220: Introduction to Computer Systems.
