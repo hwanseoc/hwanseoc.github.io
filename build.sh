@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-npm install --no-save tailwindcss @tailwindcss/cli postcss autoprefixer
-npx @tailwindcss/cli -i ./templates/tailwind.scss -o ./content/style.css --minify
+npx --yes @tailwindcss/cli -i ./templates/tailwind.scss -o ./content/style.css --minify
 
 python3 gh-md-to-html.py
