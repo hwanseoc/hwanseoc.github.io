@@ -13,6 +13,6 @@ build() {
 }
 
 while true; do
-  inotifywait -e modify,create,delete -r ./templates ./content ./gh-md-to-html.py ./build.sh
+  inotifywait -e modify,create,delete -r ./**
   build
 done
