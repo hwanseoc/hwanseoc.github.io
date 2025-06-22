@@ -1,12 +1,28 @@
 # usage: python3 gh-md-to-html.py
 
 import argparse
-import requests
-import os
 import glob
-from jinja2 import Environment, FileSystemLoader
-import shutil
+import hashlib
+import json
+import os
 import re
+import shutil
+
+import requests
+from jinja2 import Environment, FileSystemLoader
+
+def get_cache(url, payload):
+    os.makedirs("temp", exist_ok=True)
+    cache_key = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+    cache_path = os.path.join("temp", f"ghmd_{cache_key}.cache")
+    if os.path.exists(cache_path):
+        with open(cache_path, "r", encoding="utf-8") as f:
+            return f.read()
+    r = requests.post(url, json=payload)
+    r.raise_for_status()
+    with open(cache_path, "w", encoding="utf-8") as f:
+        f.write(r.text)
+    return r.text
 
 def read_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
@@ -57,9 +73,8 @@ def main():
         if args.context:
             payload["context"] = args.context
 
-        response = requests.post("https://api.github.com/markdown", json=payload)
-        response.raise_for_status()
-        rendered_html = template.render(title=page_title, content=response.text)
+        response_text = get_cache("https://api.github.com/markdown", payload)
+        rendered_html = template.render(title=page_title, content=response_text)
 
         write_file(output_html_path, rendered_html)
 
