@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bow Torque Calculator</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { color-scheme: dark; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex items-center gap-4 mb-6">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-sky-500 to-emerald-400 shadow-[0_8px_30px_rgba(56,189,248,0.35)]"></div>
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Bow Torque Calculator</h1>
+        <p class="text-sm text-slate-400">Computes F₁, F₄, and T from N and d_N using moment balance about the thumb.</p>
+      </div>
+    </header>
+
+    <!-- Card -->
+    <section class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-xl">
+      <!-- Inputs grid: order N, dN, W, dW, dF1, dF4 -->
+      <div class="grid grid-cols-12 gap-4 items-end">
+        <!-- N with slider + number -->
+        <div class="col-span-12 lg:col-span-6">
+          <label for="nRange" class="block text-xs text-slate-400 mb-1">N (string normal) [N]</label>
+          <div class="flex items-center gap-3">
+            <input id="nRange" type="range" min="0" max="2.5" step="0.01" value="1.20" class="w-full" />
+            <input id="n" type="number" min="0" max="2.5" step="0.01" value="1.20" class="w-28 px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+          </div>
+        </div>
+
+        <!-- dN with slider + number (cm) -->
+        <div class="col-span-12 lg:col-span-6">
+          <label for="dnRange" class="block text-xs text-slate-400 mb-1">d_N (thumb → string contact) [cm]</label>
+          <div class="flex items-center gap-3">
+            <input id="dnRange" type="range" min="0" max="80" step="1" value="25" class="w-full" />
+            <input id="dn" type="number" min="0" max="80" step="1" value="25" class="w-28 px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+          </div>
+        </div>
+
+        <!-- W -->
+        <div class="col-span-12 sm:col-span-6 lg:col-span-3">
+          <label for="w" class="block text-xs text-slate-400 mb-1">W (bow weight) [N]</label>
+          <input id="w" type="number" step="0.01" min="0" value="0.60" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+        </div>
+
+        <!-- dW -->
+        <div class="col-span-12 sm:col-span-6 lg:col-span-3">
+          <label for="dw" class="block text-xs text-slate-400 mb-1">d_W (thumb → COM) [cm]</label>
+          <input id="dw" type="number" step="1" min="0" value="25" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+        </div>
+
+        <!-- dF1 -->
+        <div class="col-span-12 sm:col-span-6 lg:col-span-3">
+          <label for="df1" class="block text-xs text-slate-400 mb-1">d_F1 (thumb → index) [cm]</label>
+          <input id="df1" type="number" step="1" min="0" value="3" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+        </div>
+
+        <!-- dF4 -->
+        <div class="col-span-12 sm:col-span-6 lg:col-span-3">
+          <label for="df4" class="block text-xs text-slate-400 mb-1">d_F4 (thumb → little) [cm]</label>
+          <input id="df4" type="number" step="1" min="0" value="5" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
+        </div>
+
+        <!-- Region pill -->
+        <div class="col-span-12">
+          <div class="inline-flex items-center gap-3">
+            <span class="text-xs text-slate-400">Region</span>
+            <span id="region" class="px-3 py-1 rounded-full border border-white/10 bg-slate-900 text-sm">frog</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+        <div class="rounded-xl border border-white/10 bg-slate-900 p-4 text-center">
+          <h3 class="text-xs text-slate-400 mb-1">F1 (index) [N]</h3>
+          <div id="outF1" class="text-2xl font-bold tracking-tight">0.0000</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-slate-900 p-4 text-center">
+          <h3 class="text-xs text-slate-400 mb-1">T (thumb) [N]</h3>
+          <div id="outT" class="text-2xl font-bold tracking-tight">0.0000</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-slate-900 p-4 text-center">
+          <h3 class="text-xs text-slate-400 mb-1">F4 (little) [N]</h3>
+          <div id="outF4" class="text-2xl font-bold tracking-tight">0.0000</div>
+        </div>
+      </div>
+
+      <!-- Equations (plaintext) -->
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div class="rounded-xl border border-dashed border-white/10 bg-slate-900 p-4">
+          <div class="text-sky-300 mb-2">Model (plaintext)</div>
+          <pre class="text-[13px] whitespace-pre-wrap"><code>N + T = W + F1 + F4
+
+d_N * N - d_W * W - d_F1 * F1 + d_F4 * F4 = 0</code></pre>
+        </div>
+        <div class="rounded-xl border border-dashed border-white/10 bg-slate-900 p-4">
+          <div class="text-sky-300 mb-2">Algorithm</div>
+          <pre class="text-[13px] whitespace-pre-wrap"><code>R = d_W * W - d_N * N
+If R > 0:  F1 = 0,  F4 = R / d_F4
+If R < 0:  F4 = 0,  F1 = -R / d_F1
+If R = 0:  F1 = 0,  F4 = 0
+T = W + F1 + F4 - N</code></pre>
+        </div>
+      </div>
+
+      <!-- Expanded with numbers and checks -->
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div class="rounded-xl border border-dashed border-white/10 bg-slate-900 p-4">
+          <div class="text-sky-300 mb-2">Expanded torque</div>
+          <pre id="eqExpanded" class="text-[13px] whitespace-pre-wrap"></pre>
+        </div>
+        <div class="rounded-xl border border-dashed border-white/10 bg-slate-900 p-4">
+          <div class="text-sky-300 mb-2">Checks</div>
+          <pre id="checks" class="text-[13px] whitespace-pre-wrap"></pre>
+        </div>
+      </div>
+
+      <p class="mt-3 text-xs text-slate-400">Distances use centimeters. Forces use Newtons. Thumb is the moment reference.</p>
+    </section>
+  </div>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+
+    // Sync handlers
+    $('#nRange').addEventListener('input', (e) => { $('#n').value = e.target.value; compute(); });
+    $('#n').addEventListener('input', (e) => { $('#nRange').value = e.target.value; compute(); });
+
+    $('#dnRange').addEventListener('input', (e) => { $('#dn').value = e.target.value; compute(); });
+    $('#dn').addEventListener('input', (e) => { $('#dnRange').value = e.target.value; compute(); });
+
+    ['w','dw','df1','df4'].forEach(id => { document.getElementById(id).addEventListener('input', compute); });
+
+    function num(id){ return parseFloat(document.getElementById(id).value || '0'); }
+    function regionFor(dn, dw){ return dn < dw ? 'frog' : (dn > dw ? 'tip' : 'balance'); }
+
+    function compute(){
+      const N   = num('n');
+      const W   = num('w');
+      const dN  = num('dn');
+      const dW  = num('dw');
+      const dF1 = num('df1');
+      const dF4 = num('df4');
+
+      // Region
+      $('#region').textContent = regionFor(dN, dW);
+
+      // Moment balance constants
+      const R = dW * W - dN * N;
+
+      let F1 = 0.0, F4 = 0.0;
+      if (R > 0) {
+        F1 = 0.0;
+        F4 = dF4 !== 0 ? R / dF4 : 0.0;
+      } else if (R < 0) {
+        F4 = 0.0;
+        F1 = dF1 !== 0 ? -R / dF1 : 0.0;
+      } else {
+        F1 = 0.0; F4 = 0.0;
+      }
+
+      // Vertical balance => T
+      const T = W + F1 + F4 - N;
+
+      // Outputs
+      $('#outF1').textContent = F1.toFixed(4);
+      $('#outF4').textContent = F4.toFixed(4);
+      $('#outT').textContent  = T.toFixed(4);
+
+      // Expanded torque with numbers
+      const t1 = (dN*N).toFixed(4);
+      const t2 = (dW*W).toFixed(4);
+      const t3 = (dF1*F1).toFixed(4);
+      const t4 = (dF4*F4).toFixed(4);
+      $('#eqExpanded').textContent = `d_N * N - d_W * W - d_F1 * F1 + d_F4 * F4 = 0
+` +
+        `${dN.toFixed(2)} * ${N.toFixed(2)} - ${dW.toFixed(2)} * ${W.toFixed(2)} - ${dF1.toFixed(2)} * ${F1.toFixed(4)} + ${dF4.toFixed(2)} * ${F4.toFixed(4)} = 0
+` +
+        `${t1} - ${t2} - ${t3} + ${t4} = 0`;
+
+      // Checks
+      const verticalLeft  = (N + T);
+      const verticalRight = (W + F1 + F4);
+      const torqueLeft    = (dN*N - dW*W - dF1*F1 + dF4*F4);
+
+      function nearlyEqual(a, b, eps = 1e-6){ return Math.abs(a - b) <= eps; }
+      const vertical_ok = nearlyEqual(verticalLeft, verticalRight);
+      const torque_ok   = nearlyEqual(torqueLeft, 0);
+
+      $('#checks').textContent = `Vertical: N + T = ${verticalLeft.toFixed(4)}  vs  W + F1 + F4 = ${verticalRight.toFixed(4)}  =>  ${vertical_ok ? 'OK' : 'FAIL'}
+` +
+        `Torque: d_N*N - d_W*W - d_F1*F1 + d_F4*F4 = ${torqueLeft.toFixed(6)}  =>  ${torque_ok ? 'OK' : 'FAIL'}`;
+    }
+
+    // Initial compute
+    document.addEventListener('DOMContentLoaded', compute);
+  </script>
+</body>
+</html>
