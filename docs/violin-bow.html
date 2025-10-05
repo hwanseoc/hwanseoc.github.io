@@ -18,7 +18,7 @@
       <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-sky-500 to-emerald-400 shadow-[0_8px_30px_rgba(56,189,248,0.35)]"></div>
       <div>
         <h1 class="text-2xl font-semibold tracking-tight">Bow Torque Calculator</h1>
-        <p class="text-sm text-slate-400">Computes F₁, F₄, and T from N and d_N using moment balance about the thumb.</p>
+        <p class="text-sm text-slate-400">Computes optimal F₁, F₄, and T that minimize F₁+F₄+T subject to balance constraints.</p>
       </div>
     </header>
 
@@ -37,7 +37,7 @@
 
         <!-- dN with slider + number (cm) -->
         <div class="col-span-12 lg:col-span-6">
-          <label for="dnRange" class="block text-xs text-slate-400 mb-1">d_N (thumb → string contact) [cm]</label>
+          <label for="dnRange" class="block text-xs text-slate-400 mb-1">dN (thumb → string contact) [cm]</label>
           <div class="flex items-center gap-3">
             <input id="dnRange" type="range" min="0" max="80" step="1" value="25" class="w-full" />
             <input id="dn" type="number" min="0" max="80" step="1" value="25" class="w-28 px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
@@ -52,19 +52,19 @@
 
         <!-- dW -->
         <div class="col-span-12 sm:col-span-6 lg:col-span-3">
-          <label for="dw" class="block text-xs text-slate-400 mb-1">d_W (thumb → COM) [cm]</label>
+          <label for="dw" class="block text-xs text-slate-400 mb-1">dW (thumb → COM) [cm]</label>
           <input id="dw" type="number" step="1" min="0" value="25" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
         </div>
 
         <!-- dF1 -->
         <div class="col-span-12 sm:col-span-6 lg:col-span-3">
-          <label for="df1" class="block text-xs text-slate-400 mb-1">d_F1 (thumb → index) [cm]</label>
+          <label for="df1" class="block text-xs text-slate-400 mb-1">dF1 (thumb → index) [cm]</label>
           <input id="df1" type="number" step="1" min="0" value="3" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
         </div>
 
         <!-- dF4 -->
         <div class="col-span-12 sm:col-span-6 lg:col-span-3">
-          <label for="df4" class="block text-xs text-slate-400 mb-1">d_F4 (thumb → little) [cm]</label>
+          <label for="df4" class="block text-xs text-slate-400 mb-1">dF4 (thumb → little) [cm]</label>
           <input id="df4" type="number" step="1" min="0" value="5" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10" />
         </div>
 
@@ -99,15 +99,18 @@
           <div class="text-sky-300 mb-2">Model (plaintext)</div>
           <pre class="text-[13px] whitespace-pre-wrap"><code>N + T = W + F1 + F4
 
-d_N * N - d_W * W - d_F1 * F1 + d_F4 * F4 = 0</code></pre>
+dN * N - dW * W - dF1 * F1 + dF4 * F4 = 0</code></pre>
         </div>
         <div class="rounded-xl border border-dashed border-white/10 bg-slate-900 p-4">
-          <div class="text-sky-300 mb-2">Algorithm</div>
-          <pre class="text-[13px] whitespace-pre-wrap"><code>R = d_W * W - d_N * N
-If R > 0:  F1 = 0,  F4 = R / d_F4
-If R < 0:  F4 = 0,  F1 = -R / d_F1
-If R = 0:  F1 = 0,  F4 = 0
-T = W + F1 + F4 - N</code></pre>
+          <div class="text-sky-300 mb-2">Algorithm (optimal)</div>
+          <pre class="text-[13px] whitespace-pre-wrap"><code>Let K = dW*W - dN*N.
+Assume dF1>0 and dF4>0.
+
+F1* = max( 0,
+          -K/dF1,
+          (dF4*(N - W) - K)/(dF4 + dF1) )
+F4* = (K + dF1*F1*)/dF4
+T*  = W + F1* + F4* - N</code></pre>
         </div>
       </div>
 
@@ -142,33 +145,42 @@ T = W + F1 + F4 - N</code></pre>
     function num(id){ return parseFloat(document.getElementById(id).value || '0'); }
     function regionFor(dn, dw){ return dn < dw ? 'frog' : (dn > dw ? 'tip' : 'balance'); }
 
+    function clampSmall(x, eps=1e-12){ return Math.abs(x) < eps ? 0 : x; }
+
     function compute(){
       const N   = num('n');
       const W   = num('w');
       const dN  = num('dn');
       const dW  = num('dw');
-      const dF1 = num('df1');
-      const dF4 = num('df4');
+      let dF1 = num('df1');
+      let dF4 = num('df4');
+
+      // Guard: enforce strictly positive lever arms for the formula
+      const EPS = 1e-9;
+      dF1 = dF1 <= 0 ? EPS : dF1;
+      dF4 = dF4 <= 0 ? EPS : dF4;
 
       // Region
       $('#region').textContent = regionFor(dN, dW);
 
-      // Moment balance constants
-      const R = dW * W - dN * N;
+      // Constants
+      const K = dW * W - dN * N;
 
-      let F1 = 0.0, F4 = 0.0;
-      if (R > 0) {
-        F1 = 0.0;
-        F4 = dF4 !== 0 ? R / dF4 : 0.0;
-      } else if (R < 0) {
-        F4 = 0.0;
-        F1 = dF1 !== 0 ? -R / dF1 : 0.0;
-      } else {
-        F1 = 0.0; F4 = 0.0;
-      }
+      // Lower bounds for F1
+      const lb0 = 0;
+      const lbF4pos = -K / dF1; // ensures F4 >= 0
+      const lbTpos  = (dF4 * (N - W) - K) / (dF4 + dF1); // ensures T >= 0
 
-      // Vertical balance => T
-      const T = W + F1 + F4 - N;
+      // Optimal F1
+      let F1 = Math.max(lb0, lbF4pos, lbTpos);
+      // Derived F4 and T
+      let F4 = (K + dF1 * F1) / dF4;
+      let T  = W + F1 + F4 - N;
+
+      // Numerical hygiene: clamp tiny negatives
+      F1 = Math.max(0, clampSmall(F1));
+      F4 = Math.max(0, clampSmall(F4));
+      T  = Math.max(0, clampSmall(T));
 
       // Outputs
       $('#outF1').textContent = F1.toFixed(4);
@@ -180,10 +192,8 @@ T = W + F1 + F4 - N</code></pre>
       const t2 = (dW*W).toFixed(4);
       const t3 = (dF1*F1).toFixed(4);
       const t4 = (dF4*F4).toFixed(4);
-      $('#eqExpanded').textContent = `d_N * N - d_W * W - d_F1 * F1 + d_F4 * F4 = 0
-` +
-        `${dN.toFixed(2)} * ${N.toFixed(2)} - ${dW.toFixed(2)} * ${W.toFixed(2)} - ${dF1.toFixed(2)} * ${F1.toFixed(4)} + ${dF4.toFixed(2)} * ${F4.toFixed(4)} = 0
-` +
+      $('#eqExpanded').textContent = `dN * N - dW * W - dF1 * F1 + dF4 * F4 = 0\n` +
+        `${dN.toFixed(2)} * ${N.toFixed(2)} - ${dW.toFixed(2)} * ${W.toFixed(2)} - ${dF1.toFixed(2)} * ${F1.toFixed(4)} + ${dF4.toFixed(2)} * ${F4.toFixed(4)} = 0\n` +
         `${t1} - ${t2} - ${t3} + ${t4} = 0`;
 
       // Checks
@@ -195,9 +205,8 @@ T = W + F1 + F4 - N</code></pre>
       const vertical_ok = nearlyEqual(verticalLeft, verticalRight);
       const torque_ok   = nearlyEqual(torqueLeft, 0);
 
-      $('#checks').textContent = `Vertical: N + T = ${verticalLeft.toFixed(4)}  vs  W + F1 + F4 = ${verticalRight.toFixed(4)}  =>  ${vertical_ok ? 'OK' : 'FAIL'}
-` +
-        `Torque: d_N*N - d_W*W - d_F1*F1 + d_F4*F4 = ${torqueLeft.toFixed(6)}  =>  ${torque_ok ? 'OK' : 'FAIL'}`;
+      $('#checks').textContent = `Vertical: N + T = ${verticalLeft.toFixed(4)}  vs  W + F1 + F4 = ${verticalRight.toFixed(4)}  =>  ${vertical_ok ? 'OK' : 'FAIL'}\n` +
+        `Torque: dN*N - dW*W - dF1*F1 + dF4*F4 = ${torqueLeft.toFixed(6)}  =>  ${torque_ok ? 'OK' : 'FAIL'}`;
     }
 
     // Initial compute
