@@ -267,11 +267,6 @@ T*  = W + F1* + F4* - N
       // Baseline fixed from -80 to +10
       append(make('line', { x1: x(AX_MIN), y1: y0, x2: x(AX_MAX), y2: y0, stroke:C.base, 'stroke-width':'2' }));
 
-      // Vertical lines at bow ends (shorter)
-      const vHalf = 32; // px half-height
-      append(make('line', { x1: x(AX_MIN), y1: y0 - vHalf, x2: x(AX_MIN), y2: y0 + vHalf, stroke:C.base, 'stroke-width':'2' }));
-      append(make('line', { x1: x(AX_MAX), y1: y0 - vHalf, x2: x(AX_MAX), y2: y0 + vHalf, stroke:C.base, 'stroke-width':'2' }));
-
       for(let cm = Math.ceil(AX_MIN / 10) * 10; cm <= AX_MAX; cm += 10){
         const xc = x(cm);
         append(make('line', { x1: xc, y1: y0 - 8, x2: xc, y2: y0 + 8, stroke: C.tick, 'stroke-width': '1' }));
