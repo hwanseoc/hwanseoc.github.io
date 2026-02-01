@@ -50,11 +50,16 @@ def main():
     shutil.rmtree(args.outputdir, ignore_errors=True)
     shutil.os.makedirs(args.outputdir)
 
-    # copy over non-md files
+    # copy over non-md files and directories
     for file in os.listdir(args.inputdir):
         if file.endswith(".md"):
             continue
-        shutil.copy(os.path.join(args.inputdir, file), os.path.join(args.outputdir, file))
+        src = os.path.join(args.inputdir, file)
+        dst = os.path.join(args.outputdir, file)
+        if os.path.isdir(src):
+            shutil.copytree(src, dst)
+        else:
+            shutil.copy(src, dst)
 
     # render md files
     env = Environment(loader=FileSystemLoader('templates'))

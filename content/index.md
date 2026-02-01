@@ -1,7 +1,7 @@
 <!-- title: Hwanseo Choi - About -->
 
 <p align="center">
-  <img src="index-hwanseoc-small.png" alt="Profile Photo" width="300" height="300" />
+  <img src="index/index-hwanseoc-small.png" alt="Profile Photo" width="300" height="300" />
 </p>
 
 # Hello! 👋
@@ -56,7 +56,7 @@ You can ask me anything (within reason). I'm always interested in discussing dee
   <img src="https://profile-counter.glitch.me/hwanseoc/count.svg" />
 </p>
 
-<img src="index-stats.gif" width="90%"><br/><br/>
+<img src="index/index-stats.gif" width="90%"><br/><br/>
 
 -->
 
