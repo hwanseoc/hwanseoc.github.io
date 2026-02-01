@@ -5,6 +5,7 @@ const TIMEZONES = {
   pt:  { tz: 'America/Los_Angeles', label: 'PT',  city: 'Santa Clara', domId: 'pst' },
   kst: { tz: 'Asia/Seoul',          label: 'KST', city: 'Seoul',       domId: 'seoul' },
   et:  { tz: 'America/New_York',    label: 'ET',  city: 'New York',    domId: 'est' },
+  cst: { tz: 'Asia/Shanghai',       label: 'CST', city: 'Shanghai',    domId: 'cst' },
   ist: { tz: 'Asia/Kolkata',        label: 'IST', city: 'Mumbai',      domId: 'ist' },
   utc: { tz: 'UTC',                 label: 'UTC', city: 'World',       domId: 'utc' }
 };
