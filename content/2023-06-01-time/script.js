@@ -63,10 +63,10 @@ function updatePieClock(now) {
   bgInner.setAttribute('fill', '#f3f4f6');
   svg.appendChild(bgInner);
   
-  drawPieClock(svg, cx, cy, r, 9, 18, '#818cf8', true);
+  drawPieClock(svg, cx, cy, r, 13, 21, '#818cf8', true);
   
-  let kstStart = (9 + diff) % 24;
-  let kstEnd = (18 + diff) % 24;
+  let kstStart = (13 + diff) % 24;
+  let kstEnd = (21 + diff) % 24;
   if (kstStart < 0) kstStart += 24;
   if (kstEnd < 0) kstEnd += 24;
   if (kstEnd < kstStart) {
