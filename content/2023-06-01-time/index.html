@@ -74,7 +74,18 @@ font-semibold: semi-bold font
     <!-- right panel -->
     <div class="flex-1">
       <div class="bg-white rounded-lg shadow-lg py-8 px-8 flex flex-col items-center justify-center h-full">
-        <h1 class="text-3xl font-bold text-center mb-6">World Clock</h1>
+        <h1 class="text-3xl font-bold text-center mb-4">24h Clock</h1>
+        <svg id="pieClock" width="280" height="280" viewBox="0 0 280 280"></svg>
+        <div class="flex items-center space-x-4 mt-4 text-sm">
+          <div class="flex items-center space-x-1">
+            <span class="inline-block w-4 h-4 rounded" style="background: #818cf8"></span>
+            <span>Pacific 9am-6pm</span>
+          </div>
+          <div class="flex items-center space-x-1">
+            <span class="inline-block w-4 h-4 rounded" style="background: #f472b6"></span>
+            <span>Korea</span>
+          </div>
+        </div>
       </div>
     </div>
 

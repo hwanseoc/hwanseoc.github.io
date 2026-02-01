@@ -13,35 +13,35 @@ Personal Website for Hwanseo Choi. The static page for the website is generated 
     ```bash
     pip install -r requirements.txt
     ```
-3.  Run the script to generate the HTML files:
+3.  Run the build script to compile Tailwind CSS and generate HTML files:
     ```bash
-    python3 gh-md-to-html.py
+    ./script-build.sh
+    ```
+    This downloads the Tailwind CSS standalone binary (if not present), compiles the CSS, and generates the HTML files.
+
+    Alternatively, to watch for file changes and rebuild automatically (Linux only, requires `inotifywait`):
+    ```bash
+    ./script-watch.sh
     ```
 
 ## Usage
 
 1.  Place your Markdown content files (`.md`) in the `content/` directory.
 2.  (Optional) Customize the website's HTML structure by editing the `templates/template.html` file.
-3.  Run the script to generate the HTML files in the `docs/` directory (which is used for GitHub Pages):
-    ```bash
-    python3 gh-md-to-html.py
-    ```
+3.  Run `./script-build.sh` to generate the HTML files in the `docs/` directory (which is used for GitHub Pages).
     *   By default, it reads from `content/` and writes HTML files to `docs/`.
     *   It uses GitHub Flavored Markdown (`gfm`) mode.
     *   Non-markdown files in `content/` are copied directly to `docs/`.
     *   You can specify the title for each page using an HTML comment in the markdown file: `<!-- title: Your Page Title -->`. If not specified, the filename (without extension) is used.
 
-### Command-line Arguments
+### Advanced: Python Script Options
+
+The build script runs `gh-md-to-html.py` internally. For custom configurations, you can run it directly with these options:
 
 *   `--inputdir`: Specify the input directory (default: `content`).
 *   `--outputdir`: Specify the output directory (default: `docs`).
 *   `--mode`: Set the rendering mode. Options: `markdown` (standard Markdown) or `gfm` (GitHub Flavored Markdown, default).
-*   `--context`: Specify a repository context (e.g., `username/repo`) when using `gfm` mode. This is required for correctly rendering relative links, mentions, and issue references within that repository context.
-
-    Example using the correct GFM context for this repository:
-    ```bash
-    python3 gh-md-to-html.py content/ docs/ --mode gfm
-    ```
+*   `--context`: Specify a repository context (e.g., `username/repo`) when using `gfm` mode.
 
 ## Acknowledgments
 
