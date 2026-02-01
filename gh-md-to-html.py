@@ -36,6 +36,10 @@ def extract_title(md_content, default_title):
     title_match = re.search(r'<!--\s*title:\s*(.+?)\s*-->', md_content)
     return title_match.group(1) if title_match else default_title
 
+def extract_copy(md_content):
+    copy_match = re.search(r'<!--\s*copy:\s*(.+?)\s*-->', md_content)
+    return copy_match.group(1) if copy_match else None
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--inputdir", help="Input directory containing markdown files", type=str, default="content")
@@ -72,6 +76,13 @@ def main():
         output_html_path = os.path.join(args.outputdir, filename_no_ext + ".html")
 
         md = read_file(md_file_path)
+        
+        copy_path = extract_copy(md)
+        if copy_path:
+            src = os.path.join(args.outputdir, copy_path)
+            shutil.copy(src, output_html_path)
+            continue
+
         page_title = extract_title(md, filename_no_ext)
 
         payload = {"text": md, "mode": args.mode}

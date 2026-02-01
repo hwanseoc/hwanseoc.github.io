@@ -1,7 +1,7 @@
 <!-- title: Hwanseo Choi - About -->
 
 <p align="center">
-  <img src="index/index-hwanseoc-small.png" alt="Profile Photo" width="300" height="300" />
+  <img src="/index/index-hwanseoc-small.png" alt="Profile Photo" width="300" height="300" />
 </p>
 
 # Hello! 👋

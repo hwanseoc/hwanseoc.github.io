@@ -6,8 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>World Clock</title>
-  <link rel="stylesheet" href="../tailwind.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="/tailwind.css">
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
+  <script src="/2023-06-01-time/script.js" defer></script>
 </head>
 
 <body>
@@ -40,50 +43,127 @@ font-semibold: semi-bold font
 -->
 
 <div class="bg-gradient-to-r from-purple-600 to-indigo-600 min-h-screen flex items-center justify-center p-4">
-  <div class="flex flex-col md:flex-row md:items-stretch w-full max-w-4xl space-y-4 md:space-y-0 md:space-x-8">
+  <div class="flex flex-col md:flex-row md:items-stretch w-full max-w-6xl space-y-4 md:space-y-0 md:space-x-6">
 
-    <!-- left panel -->
+    <!-- left panel: 24h clocks -->
     <div class="flex-1 flex">
-      <div class="bg-white rounded-lg shadow-lg py-8 px-6 md:px-8 flex-1 flex flex-col justify-center">
-        <h1 class="text-3xl font-bold text-center mb-6">World Clock</h1>
+      <div class="bg-white rounded-lg shadow-lg py-8 px-6 md:px-8 flex-1 flex flex-col items-center">
+        <div class="flex flex-row md:flex-col space-x-4 md:space-x-0 md:space-y-4">
+          <div class="flex flex-col items-center">
+            <h2 class="text-lg font-bold mb-2">Pacific</h2>
+            <svg id="clockPT" width="180" height="180" viewBox="0 0 280 280"></svg>
+          </div>
+          <div class="flex flex-col items-center">
+            <h2 class="text-lg font-bold mb-2">Korea</h2>
+            <svg id="clockKST" width="180" height="180" viewBox="0 0 280 280"></svg>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4 mt-4 text-sm">
+          <div class="flex items-center space-x-1">
+            <span class="inline-block w-4 h-4 rounded" style="background: #818cf8"></span>
+            <span>Sleep</span>
+          </div>
+          <div class="flex items-center space-x-1">
+            <span class="inline-block w-4 h-4 rounded" style="background: #f472b6"></span>
+            <span>Work</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- middle panel: world clock times -->
+    <div class="flex-1 flex">
+      <div class="bg-white rounded-lg shadow-lg py-8 px-6 md:px-8 flex-1">
+        <h1 class="text-2xl font-bold text-center mb-6">World Clock</h1>
         <ul class="space-y-4">
           <li class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <span class="text-2xl">&#x1F1FA;&#x1F1F8;</span>
-              <span class="text-xl font-medium">Santa Clara</span>
+              <span class="font-medium">Santa Clara (PT <span id="ptOffset"></span>)</span>
             </div>
             <div class="flex flex-col items-end">
-              <span id="pstDate" class="text-lg font-medium"></span>
-            <span id="pstClock" class="text-xl font-semibold"></span>
+              <span id="pstDate" class="text-sm font-medium"></span>
+              <span id="pstClock" class="font-semibold"></span>
             </div>
           </li>
           <li class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <span class="text-2xl">&#x1F1F0;&#x1F1F7;</span>
-              <span class="text-xl font-medium">Seoul</span>
+              <span class="font-medium">Seoul (KST <span id="kstOffset"></span>)</span>
             </div>
             <div class="flex flex-col items-end">
-              <span id="seoulDate" class="text-lg font-medium"></span>
-            <span id="seoulClock" class="text-xl font-semibold"></span>
+              <span id="seoulDate" class="text-sm font-medium"></span>
+              <span id="seoulClock" class="font-semibold"></span>
+            </div>
+          </li>
+          <li class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">&#x1F1FA;&#x1F1F8;</span>
+              <span class="font-medium">New York (ET <span id="etOffset"></span>)</span>
+            </div>
+            <div class="flex flex-col items-end">
+              <span id="estDate" class="text-sm font-medium"></span>
+              <span id="estClock" class="font-semibold"></span>
+            </div>
+          </li>
+          <li class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">&#x1F1EE;&#x1F1F3;</span>
+              <span class="font-medium">Mumbai (IST <span id="istOffset"></span>)</span>
+            </div>
+            <div class="flex flex-col items-end">
+              <span id="istDate" class="text-sm font-medium"></span>
+              <span id="istClock" class="font-semibold"></span>
+            </div>
+          </li>
+          <li class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl">&#x1F310;</span>
+              <span class="font-medium">Greenwich (UTC +0)</span>
+            </div>
+            <div class="flex flex-col items-end">
+              <span id="utcDate" class="text-sm font-medium"></span>
+              <span id="utcClock" class="font-semibold"></span>
             </div>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- right panel -->
+    <!-- right panel: timezone converter -->
     <div class="flex-1 flex">
-      <div class="bg-white rounded-lg shadow-lg py-8 px-6 md:px-8 flex-1 flex flex-col items-center justify-center">
-        <h1 class="text-3xl font-bold text-center mb-4">24h Clock</h1>
-        <svg id="pieClock" width="280" height="280" viewBox="0 0 280 280"></svg>
-        <div class="flex items-center space-x-4 mt-4 text-sm">
-          <div class="flex items-center space-x-1">
-            <span class="inline-block w-4 h-4 rounded" style="background: #818cf8"></span>
-            <span>Pacific</span>
+      <div class="bg-white rounded-lg shadow-lg py-8 px-6 md:px-8 flex-1">
+        <h1 class="text-2xl font-bold text-center mb-6">Convert</h1>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">From</label>
+            <select id="fromTz" class="w-full border rounded px-3 py-2">
+              <option value="America/Los_Angeles">Santa Clara (PT)</option>
+              <option value="America/New_York">New York (ET)</option>
+              <option value="Asia/Seoul">Seoul (KST)</option>
+              <option value="Asia/Kolkata">Mumbai (IST)</option>
+              <option value="UTC">Greenwich (UTC)</option>
+            </select>
           </div>
-          <div class="flex items-center space-x-1">
-            <span class="inline-block w-4 h-4 rounded" style="background: #f472b6"></span>
-            <span>Korea</span>
+          <div>
+            <label class="block text-sm font-medium mb-1">Time</label>
+            <input type="text" id="fromTime" class="w-full border rounded px-3 py-2" value="13:00" placeholder="HH:MM">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">To</label>
+            <select id="toTz" class="w-full border rounded px-3 py-2">
+              <option value="Asia/Seoul">Seoul (KST)</option>
+              <option value="America/Los_Angeles">Santa Clara (PT)</option>
+              <option value="America/New_York">New York (ET)</option>
+              <option value="Asia/Kolkata">Mumbai (IST)</option>
+              <option value="UTC">Greenwich (UTC)</option>
+            </select>
+          </div>
+          <div class="pt-4 border-t">
+            <div class="text-center">
+              <span class="text-sm text-gray-500">Result</span>
+              <div id="convertResult" class="text-2xl font-bold">06:00 +1d</div>
+            </div>
           </div>
         </div>
       </div>
