@@ -38,12 +38,12 @@ function formatOffset(tz) {
 function updateClocks() {
   const now = dayjs();
   
-  Object.values(TIMEZONES).forEach(({ tz, domId, label }) => {
+  Object.values(TIMEZONES).forEach(({ tz, domId, label, city }) => {
     const t = now.tz(tz);
     document.getElementById(`${domId}Date`).textContent = t.format('YYYY-MM-DD');
     document.getElementById(`${domId}Clock`).textContent = t.format('HH:mm:ss');
-    const offsetEl = document.getElementById(`${label.toLowerCase()}Offset`);
-    if (offsetEl) offsetEl.textContent = formatOffset(tz);
+    const labelEl = document.getElementById(`${label.toLowerCase()}Label`);
+    if (labelEl) labelEl.textContent = `${city} (${label} ${formatOffset(tz)})`;
   });
   
   updateOffsetLabels();
