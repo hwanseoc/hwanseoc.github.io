@@ -50,9 +50,25 @@ function updateClocks() {
   updateClocks24h(now);
 }
 
+function populateDropdowns() {
+  ['fromTz', 'toTz'].forEach(id => {
+    const select = document.getElementById(id);
+    const defaultKey = select.dataset.default;
+    select.innerHTML = '';
+    Object.entries(TIMEZONES).forEach(([key, info]) => {
+      const opt = document.createElement('option');
+      opt.value = info.tz;
+      opt.textContent = `${info.city} (${info.label} ${formatOffset(info.tz)})`;
+      if (key === defaultKey) opt.selected = true;
+      select.appendChild(opt);
+    });
+  });
+}
+
 function updateOffsetLabels() {
   ['fromTz', 'toTz'].forEach(id => {
     const select = document.getElementById(id);
+    const selectedValue = select.value;
     Array.from(select.options).forEach(opt => {
       const info = TZ_BY_IANA[opt.value];
       if (info) {
@@ -111,10 +127,10 @@ function drawClock(el, tz, now) {
       x2: cx + r * Math.cos(angle), y2: cy + r * Math.sin(angle),
       stroke: '#6b7280', 'stroke-width': h % 6 === 0 ? 2 : 1
     }));
-    if (h % 6 === 0) {
+    if (h % 3 === 0) {
       const lbl = svg('text', {
-        x: cx + (r + 12) * Math.cos(angle), y: cy + (r + 12) * Math.sin(angle),
-        'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 10, fill: '#374151'
+        x: cx + (r + 14) * Math.cos(angle), y: cy + (r + 14) * Math.sin(angle),
+        'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 16, 'font-weight': 600, fill: '#374151'
       });
       lbl.textContent = h;
       el.appendChild(lbl);
@@ -160,6 +176,8 @@ document.getElementById('fromTz').addEventListener('change', convertTime);
 document.getElementById('toTz').addEventListener('change', convertTime);
 document.getElementById('fromTime').addEventListener('input', convertTime);
 
+populateDropdowns();
+document.getElementById('fromTime').value = dayjs().tz(TIMEZONES.pt.tz).format('HH:mm');
 updateClocks();
 convertTime();
 setInterval(updateClocks, 1000);
