@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Frameworks</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    th { background: #f5f5f5; }
+    thead th { position: sticky; top: 0; background: #f5f5f5; z-index: 1; box-shadow: inset 0 -2px 0 #999; padding: 0.75rem 0.5rem; }
+    tr:hover { background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h1>Native Apps</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Pop.</th>
+        <th>iOS</th>
+        <th>Android</th>
+        <th>Windows</th>
+        <th>macOS</th>
+        <th>Linux</th>
+        <th>Rendering Engine</th>
+        <th>RHI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th colspan="9">Graphics APIs</th></tr>
+      <tr><td>Vulkan</td><td>8</td><td>via MoltenVK</td><td>Native</td><td>Native</td><td>via MoltenVK</td><td>Native</td><td></td><td>Vulkan 1.4</td></tr>
+      <tr><td>GL</td><td>7</td><td>GLES (Legacy)</td><td>GLES</td><td>Native</td><td>Legacy</td><td>Native</td><td></td><td>GL 4.6</td></tr>
+      <tr><td>DX12</td><td>10</td><td></td><td></td><td>Native</td><td>via GPTK</td><td>via Proton</td><td></td><td>DX12</td></tr>
+      <tr><td>Metal</td><td>8</td><td>Native</td><td></td><td></td><td>Native</td><td></td><td></td><td>Metal 4</td></tr>
+      <tr><th colspan="9">Frameworks</th></tr>
+      <tr><td>Android SDK</td><td>10</td><td></td><td>Skia → Vulkan | GLES</td><td></td><td></td><td></td><td>Skia</td><td></td></tr>
+      <tr><td>Qt</td><td>8</td><td>Metal | GL</td><td>GLES | Vulkan</td><td>DX11 | GL | Vulkan</td><td>Metal | GL</td><td>GL | Vulkan</td><td>Qt</td><td>Qt RHI</td></tr>
+      <tr><td>GTK</td><td>6</td><td></td><td>GLES</td><td>GL</td><td>GL</td><td>GL | Vulkan</td><td>GSK</td><td></td></tr>
+      <tr><td>Unreal Engine</td><td>9</td><td>Metal</td><td>Vulkan</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Unreal</td><td>UE RHI</td></tr>
+      <tr><td>Unity</td><td>10</td><td>Metal</td><td>Vulkan</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>CoreCLR</td><td>SRP</td></tr>
+      <tr><td>Godot</td><td>7</td><td>Metal</td><td>Vulkan</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>RenderingDevice</td><td></td></tr>
+      <tr><td>Flutter</td><td>9</td><td>Metal</td><td>Vulkan</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Impeller</td><td></td></tr>
+      <tr><td>React Native</td><td>8</td><td>Core Animation → Metal</td><td>Android SDK → Vulkan | GLES</td><td>XAML → DX11</td><td></td><td>Community</td><td>Fabric</td><td>Turbo</td></tr>
+      <tr><td>SwiftUI</td><td>7</td><td>Metal</td><td></td><td></td><td>Metal</td><td></td><td>Core Animation</td><td></td></tr>
+      <tr><td>Electron</td><td>9</td><td></td><td></td><td>Blink → DX12</td><td>Blink → Metal</td><td>Blink → Vulkan</td><td>Blink + Node.js</td><td>Dawn</td></tr>
+      <tr><td>CEF</td><td>7</td><td></td><td></td><td>Blink → DX12</td><td>Blink → Metal</td><td>Blink → Vulkan</td><td>Blink</td><td></td></tr>
+      <tr><td>SDL</td><td>7</td><td>Metal</td><td>GLES</td><td>DX12</td><td>Metal</td><td>Vulkan | GL</td><td>SDL</td><td></td></tr>
+      <tr><th colspan="9">Applications - Browsers</th></tr>
+      <tr><td>Chrome</td><td>10</td><td>WebKit → Metal</td><td>Vulkan | GLES</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Blink</td><td>Dawn</td></tr>
+      <tr><td>Safari</td><td>8</td><td>Metal</td><td></td><td></td><td>Metal</td><td></td><td>WebKit</td><td></td></tr>
+      <tr><td>Firefox</td><td>6</td><td>WebKit → Metal</td><td>Vulkan</td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Gecko</td><td>wgpu</td></tr>
+      <tr><th colspan="9">Applications - Media</th></tr>
+      <tr><td>YouTube</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td></td><td></td><td></td><td>UIKit / Android SDK</td><td></td></tr>
+      <tr><td>Spotify</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td></td><td></td><td></td><td>UIKit / Android SDK</td><td></td></tr>
+      <tr><td>VLC Media Player</td><td>9</td><td>Metal</td><td>GLES</td><td>DX11</td><td>Metal</td><td>GL + VA-API</td><td>libVLC</td><td></td></tr>
+      <tr><td>Apple Photos</td><td>9</td><td>UIKit → Metal</td><td></td><td></td><td>AppKit → Metal</td><td></td><td>Core Image + Metal</td><td></td></tr>
+      <tr><td>iMovie</td><td>8</td><td>UIKit → Metal</td><td></td><td></td><td>AppKit → Metal</td><td></td><td>AVFoundation + Metal</td><td></td></tr>
+      <tr><td>GarageBand</td><td>8</td><td>UIKit → Metal</td><td></td><td></td><td>AppKit → Metal</td><td></td><td>Core Audio + Metal</td><td></td></tr>
+      <tr><td>MPV</td><td>5</td><td></td><td>GLES</td><td>DX11</td><td>Metal</td><td>Vulkan + VA-API</td><td>libmpv</td><td></td></tr>
+      <tr><td>OBS Studio</td><td>8</td><td></td><td></td><td>Qt → DX11</td><td>Qt → Metal</td><td>Qt → GL</td><td>Qt</td><td>libobs</td></tr>
+      <tr><td>HandBrake</td><td>7</td><td></td><td></td><td>NVENC | QSV</td><td>VideoToolbox → Metal</td><td>VA-API | NVENC</td><td>libhb</td><td></td></tr>
+      <tr><td>DaVinci Resolve</td><td>7</td><td>Metal (iPad)</td><td></td><td>DX12 + CUDA</td><td>Metal</td><td>CUDA | Vulkan</td><td>DaVinci Neural Engine</td><td></td></tr>
+      <tr><td>Audacity</td><td>7</td><td></td><td></td><td>wxWidgets → GDI</td><td>wxWidgets → GL</td><td>wxWidgets → GTK → GL</td><td>wxWidgets</td><td></td></tr>
+      <tr><td>Kdenlive</td><td>5</td><td></td><td></td><td>Qt → DX11</td><td>Qt → Metal</td><td>Qt → GL | Vulkan</td><td>Qt + MLT</td><td></td></tr>
+      <tr><td>Final Cut Pro</td><td>8</td><td>Metal (iPad)</td><td></td><td></td><td>Metal</td><td></td><td>ProRes + Metal</td><td></td></tr>
+      <tr><td>Logic Pro</td><td>8</td><td>Metal (iPad)</td><td></td><td></td><td>Metal</td><td></td><td>Core Audio + Metal</td><td></td></tr>
+      <tr><th colspan="9">Applications - Creative</th></tr>
+      <tr><td>Adobe Photoshop</td><td>10</td><td>Metal (iPad)</td><td></td><td>DX12</td><td>Metal</td><td></td><td>Mercury Graphics Engine</td><td></td></tr>
+      <tr><td>Adobe Premiere Pro</td><td>9</td><td></td><td></td><td>DX12 + CUDA</td><td>Metal</td><td>CUDA | Vulkan</td><td>Mercury Playback Engine</td><td></td></tr>
+      <tr><td>Adobe After Effects</td><td>9</td><td></td><td></td><td>DX12 + CUDA</td><td>Metal</td><td></td><td>Mercury GPU Acceleration</td><td></td></tr>
+      <tr><td>Adobe Illustrator</td><td>9</td><td>Metal (iPad)</td><td></td><td>DX12</td><td>Metal</td><td></td><td>Mercury Graphics Engine</td><td></td></tr>
+      <tr><td>Adobe Lightroom</td><td>8</td><td>Metal</td><td>GLES</td><td>DX12</td><td>Metal</td><td></td><td>Camera Raw GPU</td><td></td></tr>
+      <tr><td>Blender</td><td>8</td><td></td><td></td><td>Vulkan</td><td>Metal</td><td>Vulkan</td><td>GPU Module</td><td></td></tr>
+      <tr><td>Affinity Suite</td><td>5</td><td>Metal (iPad)</td><td></td><td>DX12</td><td>Metal</td><td></td><td>Affinity Core</td><td></td></tr>
+      <tr><td>GIMP</td><td>7</td><td></td><td></td><td>GTK → GL</td><td>GTK → GL</td><td>GTK → GL | Vulkan</td><td>GTK + GEGL</td><td></td></tr>
+      <tr><td>Krita</td><td>6</td><td></td><td>Qt → GLES</td><td>Qt → DX11 | GL</td><td>Qt → Metal</td><td>Qt → GL | Vulkan</td><td>Qt</td><td></td></tr>
+      <tr><td>Sketch</td><td>7</td><td></td><td></td><td></td><td>AppKit → Metal</td><td></td><td>AppKit</td><td></td></tr>
+      <tr><td>Pixelmator Pro</td><td>6</td><td>Metal</td><td></td><td></td><td>Metal</td><td></td><td>Core Image + Metal</td><td></td></tr>
+      <tr><th colspan="9">Applications - Development</th></tr>
+      <tr><td>Xcode</td><td>8</td><td></td><td></td><td></td><td>AppKit → Metal</td><td></td><td>AppKit</td><td></td></tr>
+      <tr><td>Android Studio</td><td>9</td><td></td><td></td><td>Swing → GL</td><td>Swing → Metal</td><td>Swing → GL</td><td>JBR</td><td>Swing</td></tr>
+      <tr><td>IntelliJ IDEA</td><td>8</td><td></td><td></td><td>Swing → GL</td><td>Swing → Metal</td><td>Swing → GL</td><td>JBR</td><td>Swing</td></tr>
+      <tr><td>Sublime Text</td><td>5</td><td></td><td></td><td>GL</td><td>GL</td><td>GL</td><td>Custom Skia</td><td></td></tr>
+      <tr><td>Zed</td><td>4</td><td></td><td></td><td>DX11</td><td>Metal</td><td>Vulkan 1.3</td><td>GPUI</td><td></td></tr>
+      <tr><td>Windows Terminal</td><td>7</td><td></td><td></td><td>XAML → DX11</td><td></td><td></td><td>XAML + DirectWrite</td><td></td></tr>
+      <tr><td>Notepad++</td><td>8</td><td></td><td></td><td>Scintilla → GDI</td><td></td><td></td><td>Scintilla + Win32</td><td></td></tr>
+      <tr><th colspan="9">Applications - 3D / CAD</th></tr>
+      <tr><td>Cinema 4D</td><td>6</td><td></td><td></td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Viewport</td><td>Redshift</td></tr>
+      <tr><td>Houdini</td><td>6</td><td></td><td></td><td>DX12</td><td>Metal</td><td>Vulkan</td><td>Karma</td><td>Mantra</td></tr>
+      <tr><td>Autodesk AutoCAD</td><td>8</td><td>Metal</td><td></td><td>DX12</td><td>Metal</td><td></td><td>One Graphics System</td><td></td></tr>
+      <tr><td>Autodesk Maya</td><td>7</td><td></td><td></td><td>DX11</td><td>Metal</td><td>GL</td><td>Viewport 2.0</td><td>Hydra</td></tr>
+      <tr><td>Autodesk 3ds Max</td><td>6</td><td></td><td></td><td>DX11</td><td></td><td></td><td>Nitrous</td><td></td></tr>
+      <tr><td>SolidWorks</td><td>7</td><td></td><td></td><td>DX11</td><td></td><td></td><td>eDrawings</td><td>Visualize</td></tr>
+      <tr><th colspan="9">Applications - Communication</th></tr>
+      <tr><td>Zoom</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td>Win32 → DX11</td><td>AppKit → Metal</td><td>GL</td><td>AppKit / UIKit / Win32</td><td></td></tr>
+      <tr><td>Telegram</td><td>9</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td>Qt → DX11</td><td>AppKit → Metal</td><td>Qt → GL</td><td>AppKit / UIKit / Qt</td><td></td></tr>
+      <tr><td>Messenger</td><td>9</td><td>React Native → Metal</td><td>React Native → Vulkan | GLES</td><td></td><td></td><td></td><td>React Native</td><td></td></tr>
+      <tr><td>WhatsApp</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td>Blink → DX12</td><td>Blink → Metal</td><td></td><td>UIKit / Skia / Electron</td><td></td></tr>
+      <tr><td>Facebook</td><td>10</td><td>React Native → Metal</td><td>React Native → Vulkan | GLES</td><td></td><td></td><td></td><td>React Native</td><td></td></tr>
+      <tr><th colspan="9">Applications - Streaming</th></tr>
+      <tr><td>Netflix</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td>UWP → DX11</td><td>Catalyst → Metal</td><td></td><td>Custom Video Pipeline</td><td></td></tr>
+      <tr><td>Apple Music</td><td>8</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td></td><td>AppKit → Metal</td><td></td><td>AppKit / UIKit</td><td></td></tr>
+      <tr><th colspan="9">Applications - Productivity</th></tr>
+      <tr><td>Microsoft Office</td><td>10</td><td>UIKit → Metal</td><td></td><td>Win32 → DX12</td><td>AppKit → Metal</td><td></td><td>Office Graphics</td><td></td></tr>
+      <tr><td>Dropbox</td><td>8</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td>Win32 → DX</td><td>AppKit → Metal</td><td>GTK → GL</td><td>AppKit / UIKit / GTK</td><td></td></tr>
+      <tr><td>LibreOffice</td><td>8</td><td></td><td></td><td>VCL → Skia → GL</td><td>VCL → Skia → Metal</td><td>VCL → Skia → GL</td><td>VCL + Skia</td><td></td></tr>
+      <tr><th colspan="9">Applications - Gaming</th></tr>
+      <tr><td>Steam</td><td>10</td><td></td><td></td><td>CEF → DX12</td><td>CEF → Metal</td><td>CEF → Vulkan</td><td>CEF</td><td></td></tr>
+      <tr><td>Epic Games Launcher</td><td>9</td><td></td><td></td><td>Slate → DX12</td><td>Slate → Metal</td><td></td><td>Unreal Slate</td><td></td></tr>
+      <tr><td>Battle.net</td><td>7</td><td></td><td></td><td>Qt → DX11</td><td>Qt → Metal</td><td></td><td>Qt</td><td></td></tr>
+      <tr><th colspan="9">Applications - Games</th></tr>
+      <tr><td>Fortnite</td><td>10</td><td>UE → Metal</td><td>UE → Vulkan</td><td>UE → DX12</td><td>UE → Metal</td><td></td><td>Unreal Engine 5</td><td>UE RHI</td></tr>
+      <tr><td>Genshin Impact</td><td>10</td><td>Unity → Metal</td><td>Unity → Vulkan</td><td>Unity → DX12</td><td></td><td></td><td>Unity (modified)</td><td>SRP</td></tr>
+      <tr><td>Minecraft Java</td><td>10</td><td></td><td></td><td>LWJGL → GL</td><td>LWJGL → GL</td><td>LWJGL → GL</td><td>LWJGL</td><td></td></tr>
+      <tr><td>Minecraft Bedrock</td><td>10</td><td>RenderDragon → Metal</td><td>RenderDragon → Vulkan</td><td>RenderDragon → DX12</td><td></td><td></td><td>RenderDragon</td><td></td></tr>
+      <tr><td>League of Legends</td><td>10</td><td></td><td></td><td>Custom → DX11</td><td>Custom → Metal</td><td></td><td>Custom C++</td><td></td></tr>
+      <tr><td>Counter-Strike 2</td><td>10</td><td></td><td></td><td>Source 2 → DX11 | Vulkan</td><td></td><td>Source 2 → Vulkan</td><td>Source 2</td><td></td></tr>
+      <tr><td>Roblox</td><td>10</td><td>Custom → Metal</td><td>Custom → Vulkan | GLES</td><td>Custom → DX11</td><td>Custom → Metal</td><td></td><td>Custom Luau</td><td></td></tr>
+      <tr><td>Candy Crush</td><td>9</td><td>Defold → GLES</td><td>Defold → GLES</td><td>Defold → GL</td><td>Defold → GL</td><td></td><td>Defold</td><td></td></tr>
+      <tr><th colspan="9">Applications - Transportation</th></tr>
+      <tr><td>Uber</td><td>10</td><td>UIKit → Metal</td><td>Android SDK → Vulkan | GLES</td><td></td><td></td><td></td><td>UIKit / Android SDK</td><td></td></tr>
+      <tr><th colspan="9">Applications - Other</th></tr>
+      <tr><td>Dolphin Emulator</td><td>5</td><td>Metal</td><td>Vulkan | GLES</td><td>DX12 | Vulkan</td><td>Metal</td><td>Vulkan</td><td>VideoCommon</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Electron / CEF Apps</h2>
+  <p><strong>Web:</strong> Runs in user's browser. No installation, limited system access, smallest footprint.</p>
+  <p><strong>PWA:</strong> Progressive Web App. Installable from browser, offline support, no app store, limited system access.</p>
+  <p><strong>Electron:</strong> Chromium + Node.js bundled. Full system access, easy to develop, large bundle (~150MB+).</p>
+  <p><strong>CEF:</strong> Chromium Embedded Framework. Just Blink rendering (no Node.js), more native control, smaller than Electron, harder to develop.</p>
+  <p>All use Chromium's Blink engine → same rendering as Chrome.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>App</th>
+        <th>Pop.</th>
+        <th>Framework</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>VS Code</td><td>10</td><td>Electron</td><td>Most popular code editor</td></tr>
+      <tr><td>Cursor</td><td>8</td><td>Electron</td><td>VS Code fork with AI</td></tr>
+      <tr><td>Spotify</td><td>10</td><td>CEF</td><td>Custom CEF, not Electron</td></tr>
+      <tr><td>Steam</td><td>10</td><td>CEF</td><td>Custom CEF implementation</td></tr>
+      <tr><td>Discord</td><td>9</td><td>Electron</td><td>Gaming communication</td></tr>
+      <tr><td>Microsoft Teams</td><td>9</td><td>Electron</td><td>Recently optimizing</td></tr>
+      <tr><td>Figma</td><td>9</td><td>Electron + WASM</td><td>Heavy WebGL/WASM usage</td></tr>
+      <tr><td>Slack</td><td>8</td><td>Electron</td><td>Enterprise chat</td></tr>
+      <tr><td>Notion</td><td>8</td><td>Electron</td><td>Productivity</td></tr>
+      <tr><td>WhatsApp Desktop</td><td>8</td><td>Electron</td><td>Messaging</td></tr>
+      <tr><td>Postman</td><td>8</td><td>Electron</td><td>API testing</td></tr>
+      <tr><td>Obsidian</td><td>7</td><td>Electron</td><td>Markdown notes</td></tr>
+      <tr><td>Bitwarden</td><td>7</td><td>Electron</td><td>Password manager</td></tr>
+      <tr><td>1Password</td><td>7</td><td>Electron</td><td>Was native, migrated to Electron</td></tr>
+      <tr><td>Signal</td><td>6</td><td>Electron</td><td>Messaging</td></tr>
+      <tr><td>Insomnia</td><td>6</td><td>Electron</td><td>API testing</td></tr>
+      <tr><td>MongoDB Compass</td><td>6</td><td>Electron</td><td>Database GUI</td></tr>
+      <tr><td>GOG Galaxy</td><td>6</td><td>CEF</td><td>Game launcher</td></tr>
+      <tr><th colspan="4">Productivity</th></tr>
+      <tr><td>Miro</td><td>8</td><td>Electron</td><td>Whiteboard</td></tr>
+      <tr><td>Trello</td><td>8</td><td>Electron</td><td>Kanban boards</td></tr>
+      <tr><td>Linear</td><td>8</td><td>Electron</td><td>Issue tracking</td></tr>
+      <tr><td>ClickUp</td><td>7</td><td>Electron</td><td>Project management</td></tr>
+      <tr><th colspan="4">Development</th></tr>
+      <tr><td>Docker Desktop</td><td>9</td><td>Electron</td><td>Container management</td></tr>
+      <tr><td>GitHub Desktop</td><td>8</td><td>Electron</td><td>Git GUI</td></tr>
+      <tr><td>Lens</td><td>7</td><td>Electron</td><td>Kubernetes IDE</td></tr>
+      <tr><td>GitKraken</td><td>7</td><td>Electron</td><td>Git GUI</td></tr>
+      <tr><td>Azure Data Studio</td><td>6</td><td>Electron</td><td>VS Code-based SQL</td></tr>
+      <tr><th colspan="4">Notes / Writing</th></tr>
+      <tr><td>Evernote</td><td>7</td><td>Electron</td><td>Migrated from native</td></tr>
+      <tr><td>Logseq</td><td>6</td><td>Electron</td><td>Outliner notes</td></tr>
+      <tr><td>Typora</td><td>6</td><td>Electron</td><td>Markdown editor</td></tr>
+      <tr><td>Joplin</td><td>6</td><td>Electron</td><td>Note-taking</td></tr>
+      <tr><td>Standard Notes</td><td>5</td><td>Electron</td><td>Encrypted notes</td></tr>
+      <tr><th colspan="4">Communication</th></tr>
+      <tr><td>Webex</td><td>7</td><td>Electron</td><td>Video conferencing</td></tr>
+      <tr><td>Loom</td><td>7</td><td>Electron</td><td>Screen recording</td></tr>
+      <tr><td>Front</td><td>6</td><td>Electron</td><td>Shared inbox</td></tr>
+      <tr><td>Gather</td><td>5</td><td>Electron</td><td>Virtual office</td></tr>
+      <tr><td>Mailspring</td><td>5</td><td>Electron</td><td>Email client</td></tr>
+      <tr><th colspan="4">Design</th></tr>
+      <tr><td>Framer</td><td>7</td><td>Electron</td><td>Prototyping</td></tr>
+      <tr><td>Zeplin</td><td>6</td><td>Electron</td><td>Design handoff</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>
