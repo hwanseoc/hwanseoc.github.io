@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta name="color-scheme" content="light dark">
+    <title>Tools</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <link rel="stylesheet" href="tailwind.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css">
+    <style>
+      /* dark mode background */
+      @media (prefers-color-scheme: dark) {
+        body { background-color: #0d1117; }
+      }
+      /* Restore list styles within markdown-body */
+      .markdown-body ul {
+        list-style: disc;
+        padding-left: 2em;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!--
+      Tailwind utility cheat‑sheet (used in this file)
+      ──────────────────────────────────────────────
+      w-full            → width: 100%
+      max-w-5xl         → max-width ~ 64rem (narrower than default breakpoint)
+      mx-auto           → center block horizontally with auto margins
+      h-16              → height: 4 rem
+      flex              → display: flex
+      items-center      → align-items: center (vertical align in flex row)
+      justify-between   → space-between distribution in flex row
+      px-3              → horizontal padding 0.75 rem
+      px-4              → horizontal padding 1 rem
+      py-2              → vertical padding 0.5 rem
+      py-8              → vertical padding 2 rem
+      sm:px-6           → padding 1.5 rem from the sm breakpoint and up
+      gap-6             → gap 1.5 rem between flex children
+      text-sm           → font-size 0.875 rem / line-height 1.25 rem
+      text-lg           → font‑size 1.125 rem / line-height 1.75 rem
+      font-medium       → font-weight 500
+      font-semibold     → font-weight 600
+      border-b          → bottom border 1 px (currentColor)
+      shadow-sm         → small box‑shadow
+      rounded-md        → border‑radius 0.375 rem
+    -->
+
+    <!-- Navbar -->
+    <nav class="w-full py-0 border-b shadow-sm">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 flex h-16 items-center justify-between">
+        <a href="/" class="text-lg font-bold">Hwanseo Choi</a>
+        <ul class="flex gap-6 text-sm font-medium">
+          <li><a href="/" class="px-3 py-2">About</a></li>
+          <li><a href="/blog" class="px-3 py-2">Blog</a></li>
+          <li><a href="https://github.com/hwanseoc" class="px-3 py-2">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="w-full pt-8">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6">
+        <article class="markdown-body">
+          
+<h1>Tools</h1>
+<p>A collection of small utilities and reference pages.</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="2023-06-01-time/">Time</a></td>
+<td>World clock showing Seoul and PST time zones</td>
+</tr>
+<tr>
+<td><a href="2024-08-01-violin-bow/">Violin Bow Calculator</a></td>
+<td>Physics calculator for violin bow torque and finger forces</td>
+</tr>
+<tr>
+<td><a href="2026-02-01-graphics/">UI Frameworks</a></td>
+<td>Comparison table of graphics APIs and UI frameworks across platforms</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+        </article>
+      </div>
+    </main>
+
+  </body>
+</html>
