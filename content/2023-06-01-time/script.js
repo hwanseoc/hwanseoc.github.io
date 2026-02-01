@@ -149,7 +149,10 @@ function convertTime() {
   const fromTz = document.getElementById('fromTz').value;
   const toTz = document.getElementById('toTz').value;
   const timeStr = document.getElementById('fromTime').value;
-  if (!timeStr) return;
+  if (!/^(\d|[01]\d|2[0-3]):[0-5]\d$/.test(timeStr)) {
+    document.getElementById('convertResult').textContent = '--:--';
+    return;
+  }
   
   const [hours, minutes] = timeStr.split(':').map(Number);
   const today = dayjs().tz(fromTz).hour(hours).minute(minutes).second(0);
@@ -158,8 +161,8 @@ function convertTime() {
   const dayDiff = converted.startOf('day').diff(today.startOf('day'), 'day');
   const resultStr = converted.format('HH:mm');
   let dayStr = '';
-  if (dayDiff > 0) dayStr = ` +${dayDiff}d`;
-  else if (dayDiff < 0) dayStr = ` ${dayDiff}d`;
+  if (dayDiff > 0) dayStr = ` (+${dayDiff}d)`;
+  else if (dayDiff < 0) dayStr = ` (${dayDiff}d)`;
   
   document.getElementById('convertResult').textContent = resultStr + dayStr;
 }

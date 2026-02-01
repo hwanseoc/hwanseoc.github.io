@@ -35,49 +35,6 @@ function formatOffset(tz) {
   return `${offset >= 0 ? '+' : ''}${offset}`;
 }
 
-function updateClocks() {
-  const now = dayjs();
-  
-  Object.values(TIMEZONES).forEach(({ tz, domId, label, city }) => {
-    const t = now.tz(tz);
-    document.getElementById(`${domId}Date`).textContent = t.format('YYYY-MM-DD');
-    document.getElementById(`${domId}Clock`).textContent = t.format('HH:mm:ss');
-    const labelEl = document.getElementById(`${label.toLowerCase()}Label`);
-    if (labelEl) labelEl.textContent = `${city} (${label} ${formatOffset(tz)})`;
-  });
-  
-  updateOffsetLabels();
-  updateClocks24h(now);
-}
-
-function populateDropdowns() {
-  ['fromTz', 'toTz'].forEach(id => {
-    const select = document.getElementById(id);
-    const defaultKey = select.dataset.default;
-    select.innerHTML = '';
-    Object.entries(TIMEZONES).forEach(([key, info]) => {
-      const opt = document.createElement('option');
-      opt.value = info.tz;
-      opt.textContent = `${info.city} (${info.label} ${formatOffset(info.tz)})`;
-      if (key === defaultKey) opt.selected = true;
-      select.appendChild(opt);
-    });
-  });
-}
-
-function updateOffsetLabels() {
-  ['fromTz', 'toTz'].forEach(id => {
-    const select = document.getElementById(id);
-    const selectedValue = select.value;
-    Array.from(select.options).forEach(opt => {
-      const info = TZ_BY_IANA[opt.value];
-      if (info) {
-        opt.textContent = `${info.city} (${info.label} ${formatOffset(info.tz)})`;
-      }
-    });
-  });
-}
-
 function drawArc(parent, startHour, endHour, color) {
   const { cx, cy, r } = CLOCK;
   const rInner = r * 0.5, rOuter = r * 0.9;
@@ -148,36 +105,74 @@ function drawClock(el, tz, now) {
   el.appendChild(svg('circle', { cx, cy, r: 5, fill: '#1f2937' }));
 }
 
-function updateClocks24h(now) {
+function updateClocks() {
+  const now = dayjs();
+  
+  Object.values(TIMEZONES).forEach(({ tz, domId, label, city }) => {
+    const t = now.tz(tz);
+    document.getElementById(`${domId}Date`).textContent = t.format('YYYY-MM-DD');
+    document.getElementById(`${domId}Clock`).textContent = t.format('HH:mm:ss');
+    const labelEl = document.getElementById(`${label.toLowerCase()}Label`);
+    if (labelEl) labelEl.textContent = `${city} (${label} ${formatOffset(tz)})`;
+  });
+  
+  ['fromTz', 'toTz'].forEach(id => {
+    const select = document.getElementById(id);
+    Array.from(select.options).forEach(opt => {
+      const info = TZ_BY_IANA[opt.value];
+      if (info) {
+        opt.textContent = `${info.city} (${info.label} ${formatOffset(info.tz)})`;
+      }
+    });
+  });
+  
   drawClock(document.getElementById('clockPT'), TIMEZONES.pt.tz, now);
   drawClock(document.getElementById('clockKST'), TIMEZONES.kst.tz, now);
+}
+
+function populateDropdowns() {
+  ['fromTz', 'toTz'].forEach(id => {
+    const select = document.getElementById(id);
+    const defaultKey = select.dataset.default;
+    select.innerHTML = '';
+    Object.entries(TIMEZONES).forEach(([key, info]) => {
+      const opt = document.createElement('option');
+      opt.value = info.tz;
+      opt.textContent = `${info.city} (${info.label} ${formatOffset(info.tz)})`;
+      if (key === defaultKey) opt.selected = true;
+      select.appendChild(opt);
+    });
+  });
 }
 
 function convertTime() {
   const fromTz = document.getElementById('fromTz').value;
   const toTz = document.getElementById('toTz').value;
   const timeStr = document.getElementById('fromTime').value;
-  if (!timeStr) return;
+  if (!/^(\d|[01]\d|2[0-3]):[0-5]\d$/.test(timeStr)) {
+    document.getElementById('convertResult').textContent = '--:--';
+    return;
+  }
   
   const [hours, minutes] = timeStr.split(':').map(Number);
   const today = dayjs().tz(fromTz).hour(hours).minute(minutes).second(0);
   const converted = today.tz(toTz);
   
-  const dayDiff = converted.date() - today.date();
+  const dayDiff = converted.startOf('day').diff(today.startOf('day'), 'day');
   const resultStr = converted.format('HH:mm');
   let dayStr = '';
-  if (dayDiff > 0) dayStr = ` +${dayDiff}d`;
-  else if (dayDiff < 0) dayStr = ` ${dayDiff}d`;
+  if (dayDiff > 0) dayStr = ` (+${dayDiff}d)`;
+  else if (dayDiff < 0) dayStr = ` (${dayDiff}d)`;
   
   document.getElementById('convertResult').textContent = resultStr + dayStr;
 }
 
-document.getElementById('fromTz').addEventListener('change', convertTime);
-document.getElementById('toTz').addEventListener('change', convertTime);
-document.getElementById('fromTime').addEventListener('input', convertTime);
-
-populateDropdowns();
-document.getElementById('fromTime').value = dayjs().tz(TIMEZONES.pt.tz).format('HH:mm');
-updateClocks();
-convertTime();
-setInterval(updateClocks, 1000);
+document.addEventListener('DOMContentLoaded', () => {
+  ['fromTz', 'toTz'].forEach(id => document.getElementById(id).addEventListener('change', convertTime));
+  document.getElementById('fromTime').addEventListener('input', convertTime);
+  populateDropdowns();
+  document.getElementById('fromTime').value = dayjs().tz(TIMEZONES.pt.tz).format('HH:mm');
+  updateClocks();
+  convertTime();
+  setInterval(updateClocks, 1000);
+});
