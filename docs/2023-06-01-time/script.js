@@ -83,7 +83,7 @@ function drawClock(el, tz, now) {
     el.appendChild(svg('line', {
       x1: cx + (r - 8) * Math.cos(angle), y1: cy + (r - 8) * Math.sin(angle),
       x2: cx + r * Math.cos(angle), y2: cy + r * Math.sin(angle),
-      stroke: '#6b7280', 'stroke-width': h % 6 === 0 ? 2 : 1
+      stroke: '#6b7280', 'stroke-width': h % 3 === 0 ? 2 : 1
     }));
     if (h % 3 === 0) {
       const lbl = svg('text', {
