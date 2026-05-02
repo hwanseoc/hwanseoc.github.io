@@ -13,125 +13,90 @@
   <script src="/2023-06-01-time/script.js" defer></script>
 </head>
 
-<body>
+<body class="bg-[#0f1411] text-[#f4f1ea]">
 
-<!-- Tailwind classes used: 
-bg-gradient-to-r: background gradient left to right, 
-from-purple-600: gradient starts from purple-600, 
-to-indigo-600: gradient ends at indigo-600, 
-h-screen: height 100vh, 
-flex: use flexbox, 
-items-center: align items vertically center, 
-justify-center: center content horizontally, 
-bg-white: background color white, 
-w-full: width 100%,
-rounded-lg: large border radius, 
-shadow-lg: large box shadow, 
-py-8: padding y-axis 2rem, 
-px-4: padding x-axis 1rem, 
-text-3xl: font size 1.875rem, 
-font-bold: bold font, 
-text-center: center text,
-mb-6: margin bottom 1.5rem, 
-space-y-4: vertical spacing 1rem between children, 
-justify-between: space between items, 
-space-x-3: horizontal spacing 0.75rem between children, 
-text-2xl: font size 1.5rem, 
-text-xl: font size 1.25rem, 
-font-medium: medium font weight, 
-font-semibold: semi-bold font
--->
-
-<div class="bg-gradient-to-r from-purple-600 to-indigo-600 min-h-screen flex items-center justify-center p-2">
-  <div class="flex flex-col md:flex-row md:items-stretch w-full max-w-7xl space-y-2 md:space-y-0 md:space-x-4">
+<div class="min-h-screen overflow-x-hidden bg-[#0f1411] p-4 flex items-center justify-center max-[1020px]:items-start max-[640px]:p-3">
+  <div class="flex w-full max-w-7xl flex-row items-stretch gap-4 max-[1020px]:max-w-lg max-[1020px]:flex-col max-[640px]:max-w-full">
 
     <!-- left panel: 24h clocks -->
-    <div class="flex-1 flex">
-      <div class="bg-white rounded-lg shadow-lg py-6 px-4 md:px-6 flex-1 flex flex-col items-center">
+    <div class="flex min-w-0 flex-1">
+      <div class="w-full min-w-0 rounded-lg border border-[#2a332d] bg-[#171c18] shadow-[0_16px_42px_rgba(0,0,0,0.24)] py-6 px-4 md:px-6 flex-1 flex flex-col items-center">
         <div class="flex flex-col space-y-4">
           <div class="flex flex-col items-center">
-            <h2 class="text-xl font-bold mb-2">Santa Clara</h2>
+            <h2 class="text-xl font-bold mb-2 text-[#f8f5ee]">Santa Clara</h2>
             <svg id="clockPT" width="220" height="220" viewBox="0 -10 280 300"></svg>
           </div>
           <div class="flex flex-col items-center">
-            <h2 class="text-xl font-bold mb-2">Seoul</h2>
+            <h2 class="text-xl font-bold mb-2 text-[#f8f5ee]">Seoul</h2>
             <svg id="clockKST" width="220" height="220" viewBox="0 -10 280 300"></svg>
           </div>
         </div>
-        <div class="flex items-center space-x-4 mt-4 text-base">
-          <div class="flex items-center space-x-1">
-            <span class="inline-block w-4 h-4 rounded" style="background: #818cf8"></span>
-            <span>Sleep</span>
-          </div>
-          <div class="flex items-center space-x-1">
-            <span class="inline-block w-4 h-4 rounded" style="background: #f472b6"></span>
-            <span>Work</span>
-          </div>
-        </div>
+        <div id="currentActivity" class="mt-4 w-fit max-w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-center text-sm font-medium text-[#f4f1ea]"></div>
+        <div id="scheduleLegend" class="mt-4 grid w-full max-w-full grid-cols-[repeat(5,max-content)] justify-center gap-x-4 gap-y-2 px-1 text-sm max-[640px]:grid-cols-[repeat(3,max-content)] max-[640px]:gap-x-3 max-[640px]:text-[0.8rem]"></div>
       </div>
     </div>
 
     <!-- middle panel: world clock times -->
-    <div class="flex-1 flex">
-      <div class="bg-white rounded-lg shadow-lg py-6 px-4 md:px-6 flex-1">
+    <div class="flex min-w-0 flex-1">
+      <div class="w-full min-w-0 rounded-lg border border-[#2a332d] bg-[#171c18] shadow-[0_16px_42px_rgba(0,0,0,0.24)] py-6 px-4 md:px-6 flex-1">
         <ul class="space-y-4">
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F1FA;&#x1F1F8;</span>
-              <span id="ptLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="ptLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="pstDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="pstDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="pstClock" class="text-base font-semibold"></span>
             </div>
           </li>
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F1F0;&#x1F1F7;</span>
-              <span id="kstLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="kstLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="seoulDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="seoulDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="seoulClock" class="text-base font-semibold"></span>
             </div>
           </li>
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F1FA;&#x1F1F8;</span>
-              <span id="etLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="etLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="estDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="estDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="estClock" class="text-base font-semibold"></span>
             </div>
           </li>
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F1E8;&#x1F1F3;</span>
-              <span id="cstLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="cstLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="cstDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="cstDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="cstClock" class="text-base font-semibold"></span>
             </div>
           </li>
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F1EE;&#x1F1F3;</span>
-              <span id="istLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="istLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="istDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="istDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="istClock" class="text-base font-semibold"></span>
             </div>
           </li>
-          <li class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+          <li class="flex min-w-0 items-center justify-between gap-3 text-[#f4f1ea]">
+            <div class="flex min-w-0 items-center space-x-3">
               <span class="text-3xl">&#x1F310;</span>
-              <span id="utcLabel" class="text-lg font-medium whitespace-nowrap"></span>
+              <span id="utcLabel" class="truncate text-lg font-medium whitespace-nowrap"></span>
             </div>
-            <div class="flex flex-col items-end">
-              <span id="utcDate" class="text-sm font-medium"></span>
+            <div class="flex shrink-0 flex-col items-end">
+              <span id="utcDate" class="text-sm font-medium text-[#a8b0a8]"></span>
               <span id="utcClock" class="text-base font-semibold"></span>
             </div>
           </li>
@@ -140,24 +105,24 @@ font-semibold: semi-bold font
     </div>
 
     <!-- right panel: timezone converter -->
-    <div class="flex-1 flex">
-      <div class="bg-white rounded-lg shadow-lg py-6 px-4 md:px-6 flex-1">
+    <div class="flex min-w-0 flex-1">
+      <div class="w-full min-w-0 rounded-lg border border-[#2a332d] bg-[#171c18] shadow-[0_16px_42px_rgba(0,0,0,0.24)] py-6 px-4 md:px-6 flex-1">
         <div class="space-y-4">
           <div>
-            <label class="block text-base font-medium mb-1">From</label>
-            <select id="fromTz" class="w-full border rounded px-3 py-2" data-default="pt"></select>
+            <label class="block text-base font-medium mb-1 text-[#a8b0a8]">From</label>
+            <select id="fromTz" class="w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-[#f4f1ea] focus:border-[#34d399] focus:outline-2 focus:outline-offset-1 focus:outline-[#34d399]/20" data-default="pt"></select>
           </div>
           <div>
-            <label class="block text-base font-medium mb-1">Time</label>
-            <input type="text" id="fromTime" class="w-full border rounded px-3 py-2" placeholder="HH:MM">
+            <label class="block text-base font-medium mb-1 text-[#a8b0a8]">Time</label>
+            <input type="text" id="fromTime" class="w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-[#f4f1ea] placeholder:text-[#687269] focus:border-[#34d399] focus:outline-2 focus:outline-offset-1 focus:outline-[#34d399]/20" placeholder="HH:MM">
           </div>
           <div>
-            <label class="block text-base font-medium mb-1">To</label>
-            <select id="toTz" class="w-full border rounded px-3 py-2" data-default="kst"></select>
+            <label class="block text-base font-medium mb-1 text-[#a8b0a8]">To</label>
+            <select id="toTz" class="w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-[#f4f1ea] focus:border-[#34d399] focus:outline-2 focus:outline-offset-1 focus:outline-[#34d399]/20" data-default="kst"></select>
           </div>
           <div>
-            <label class="block text-base font-medium mb-1">Result</label>
-            <div id="convertResult" class="w-full border rounded px-3 py-2 bg-gray-100"></div>
+            <label class="block text-base font-medium mb-1 text-[#a8b0a8]">Result</label>
+            <div id="convertResult" class="w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-[#f4f1ea]"></div>
           </div>
         </div>
       </div>
