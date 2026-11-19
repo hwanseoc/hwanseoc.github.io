@@ -241,16 +241,6 @@ function updateDaylightStatus(now, actualOffset) {
   $('daylightStatus').textContent = `Pacific daylight saving is ${daylight ? 'on (PDT)' : 'off (PST)'}. Switches ${daylight ? 'off' : 'on'} in ${days}d ${hours}h ${minutes % 60}m · ${date} PT`;
 }
 
-function renderSchedule(offset) {
-  const format = hour => String((hour + 24) % 24).padStart(2, '0') + ':00';
-  const difference = 9 - offset / 60;
-  $('schedulePT').textContent = offset === -420 ? 'PDT' : 'PST';
-  $('scheduleRows').innerHTML = SCHEDULE.map(({ name, start, end }) =>
-    `<tr><td>${name}</td><td>${format(start)}–${format(end)}</td><td>${format(start + difference)}–${format(end + difference)}</td></tr>`
-  ).join('');
-}
-
-let displayedOffset;
 function updateClocks() {
   const now = dayjs();
 
@@ -278,10 +268,6 @@ function updateClocks() {
   drawClock($('clockKST'), now.tz(TIMEZONES.kst.tz), offset);
   updateCurrentActivity(now, ptNow, mode);
   updateDaylightStatus(now, actual.utcOffset());
-  if (displayedOffset !== offset) {
-    renderSchedule(offset);
-    displayedOffset = offset;
-  }
 }
 
 function populateDropdowns() {
