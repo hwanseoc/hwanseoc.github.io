@@ -19,6 +19,7 @@ const ACTIVITY_COLORS = {
   lunch: '#f59e0b',
   free: '#34d399',
   dinner: '#fb7185',
+  windDown: '#67e8f9',
   sleep: '#818cf8'
 };
 
@@ -36,7 +37,7 @@ const SCHEDULE = [
     color: ACTIVITY_COLORS.lunch
   },
   {
-    name: 'Free',
+    name: 'Free time',
     start: 13,
     end: 18,
     color: ACTIVITY_COLORS.free
@@ -48,14 +49,20 @@ const SCHEDULE = [
     color: ACTIVITY_COLORS.dinner
   },
   {
-    name: 'Free',
+    name: 'Free time',
     start: 19,
     end: 20,
     color: ACTIVITY_COLORS.free
   },
   {
-    name: 'Sleep',
+    name: 'Wind down',
     start: 20,
+    end: 21,
+    color: ACTIVITY_COLORS.windDown
+  },
+  {
+    name: 'Sleep',
+    start: 21,
     end: 5,
     color: ACTIVITY_COLORS.sleep
   }
