@@ -237,8 +237,10 @@ function updateDaylightStatus(now, actualOffset) {
   const days = Math.floor(minutes / 1440);
   const hours = Math.floor(minutes % 1440 / 60);
   const daylight = actualOffset === -420;
-  const date = dayjs(nextSwitch).tz(TIMEZONES.pt.tz).format('MMM D, YYYY');
-  $('daylightStatus').textContent = `Pacific daylight saving is ${daylight ? 'on (PDT)' : 'off (PST)'}. Switches ${daylight ? 'off' : 'on'} in ${days}d ${hours}h ${minutes % 60}m · ${date} PT`;
+  const date = dayjs(nextSwitch).tz(TIMEZONES.pt.tz).format('MMM D');
+  $('daylightStatus').textContent = daylight ? 'On (PDT)' : 'Off (PST)';
+  $('switchDate').textContent = `Switches ${daylight ? 'off' : 'on'} ${date}`;
+  $('switchCountdown').textContent = `in ${days}d ${hours}h ${minutes % 60}m`;
 }
 
 function updateClocks() {
