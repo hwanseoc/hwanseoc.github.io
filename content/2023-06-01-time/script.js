@@ -18,7 +18,6 @@ const ACTIVITY_COLORS = {
   work: '#f472b6',
   free: '#34d399',
   dinner: '#fb7185',
-  windDown: '#67e8f9',
   sleep: '#818cf8'
 };
 
@@ -30,8 +29,7 @@ function scheduleForPacificOffset(offsetMinutes) {
     { name: 'Sleep', start: 18, end: 22, color: ACTIVITY_COLORS.sleep },
     { name: 'Free time', start: 22, end: dinner, color: ACTIVITY_COLORS.free },
     { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
-    { name: 'Free time', start: dinner + 1, end: 4, color: ACTIVITY_COLORS.free },
-    { name: 'Wind down', start: 4, end: 5, color: ACTIVITY_COLORS.windDown },
+    { name: 'Free time', start: dinner + 1, end: 5, color: ACTIVITY_COLORS.free },
     { name: 'Sleep', start: 5, end: 9, color: ACTIVITY_COLORS.sleep }
   ];
 }
