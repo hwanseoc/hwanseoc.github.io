@@ -90,6 +90,7 @@ function intlZoneName(tz, at = dayjs()) {
 }
 
 function zoneAbbr(info, at = dayjs()) {
+  if (info === TIMEZONES.pt || info === TIMEZONES.et) return info.label;
   const name = intlZoneName(info.tz, at);
   return name && !/^GMT[+-]/.test(name) ? name : info.label;
 }
@@ -178,9 +179,8 @@ function updateCurrentActivity(now, ptNow, mode, schedule) {
   const el = $('currentActivity');
   if (!block || !el) return;
 
-  const label = ptNow.utcOffset() === -420 ? 'PDT' : 'PST';
   const context = mode === 'auto' ? 'now' : 'preview';
-  el.innerHTML = `<span class="font-semibold" style="color: ${block.color}">${block.name}</span> ${context}: ${current.format('HH:mm')} KST / ${ptNow.format('HH:mm')} ${label}`;
+  el.innerHTML = `<span class="font-semibold" style="color: ${block.color}">${block.name}</span> ${context}: ${current.format('HH:mm')} KST / ${ptNow.format('HH:mm')} PT`;
 }
 
 let nextSwitch = 0;
