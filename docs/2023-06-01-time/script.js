@@ -25,12 +25,13 @@ function scheduleForPacificOffset(offsetMinutes) {
   // Convert the fixed 18:00 Seoul dinner to Pacific time.
   const dinner = 18 - 9 + offsetMinutes / 60;
   return [
-    { name: 'Work', start: 9, end: 18, color: ACTIVITY_COLORS.work },
+    { name: 'Work', start: 10, end: 18, color: ACTIVITY_COLORS.work },
     { name: 'Sleep', start: 18, end: 22, color: ACTIVITY_COLORS.sleep },
     { name: 'Free time', start: 22, end: dinner, color: ACTIVITY_COLORS.free },
     { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
     { name: 'Free time', start: dinner + 1, end: 5, color: ACTIVITY_COLORS.free },
-    { name: 'Sleep', start: 5, end: 9, color: ACTIVITY_COLORS.sleep }
+    { name: 'Sleep', start: 5, end: 9, color: ACTIVITY_COLORS.sleep },
+    { name: 'Free time', start: 9, end: 10, color: ACTIVITY_COLORS.free }
   ];
 }
 
