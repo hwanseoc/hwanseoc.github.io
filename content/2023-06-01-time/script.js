@@ -23,50 +23,21 @@ const ACTIVITY_COLORS = {
   sleep: '#818cf8'
 };
 
-const SCHEDULE = [
-  {
-    name: 'Work',
-    start: 13,
-    end: 20,
-    color: ACTIVITY_COLORS.work
-  },
-  {
-    name: 'Lunch',
-    start: 20,
-    end: 21,
-    color: ACTIVITY_COLORS.lunch
-  },
-  {
-    name: 'Free time',
-    start: 21,
-    end: 2,
-    color: ACTIVITY_COLORS.free
-  },
-  {
-    name: 'Dinner',
-    start: 2,
-    end: 3,
-    color: ACTIVITY_COLORS.dinner
-  },
-  {
-    name: 'Free time',
-    start: 3,
-    end: 4,
-    color: ACTIVITY_COLORS.free
-  },
-  {
-    name: 'Wind down',
-    start: 4,
-    end: 5,
-    color: ACTIVITY_COLORS.windDown
-  },
-  {
-    name: 'Sleep',
-    start: 5,
-    end: 13,
-    color: ACTIVITY_COLORS.sleep
-  }
-];
+function scheduleForPacificOffset(offsetMinutes) {
+  // Meals follow Seoul time. Work starts and sleep ends at 13:00 Pacific.
+  const seoulToPacific = hour => (hour - 9 + offsetMinutes / 60 + 24) % 24;
+  const lunch = seoulToPacific(12);
+  const dinner = seoulToPacific(18);
+  return [
+    { name: 'Work', start: 13, end: lunch, color: ACTIVITY_COLORS.work },
+    { name: 'Lunch', start: lunch, end: lunch + 1, color: ACTIVITY_COLORS.lunch },
+    { name: 'Free time', start: lunch + 1, end: dinner, color: ACTIVITY_COLORS.free },
+    { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
+    { name: 'Free time', start: dinner + 1, end: 4, color: ACTIVITY_COLORS.free },
+    { name: 'Wind down', start: 4, end: 5, color: ACTIVITY_COLORS.windDown },
+    { name: 'Sleep', start: 5, end: 13, color: ACTIVITY_COLORS.sleep }
+  ];
+}
 
 const CLOCK = {
   cx: 140,
@@ -154,7 +125,7 @@ function drawTimeRange(el, startPT, endPT, color, diff) {
   }
 }
 
-function drawClock(el, tzNow, pacificOffset) {
+function drawClock(el, tzNow, pacificOffset, schedule) {
   el.innerHTML = '';
   const { cx, cy, r, bg, inner, tick, text, hand } = CLOCK;
 
@@ -162,7 +133,7 @@ function drawClock(el, tzNow, pacificOffset) {
 
   el.appendChild(svg('circle', { cx, cy, r, fill: bg }));
 
-  SCHEDULE.forEach(({ start, end, color }) => {
+  schedule.forEach(({ start, end, color }) => {
     drawTimeRange(el, start, end, color, diff);
   });
 
@@ -200,10 +171,10 @@ function isInRange(hour, start, end) {
   return hour >= start || hour < end;
 }
 
-function updateCurrentActivity(now, ptNow, mode) {
+function updateCurrentActivity(now, ptNow, mode, schedule) {
   const current = now.tz(TIMEZONES.kst.tz);
   const hour = ptNow.hour() + ptNow.minute() / 60;
-  const block = SCHEDULE.find(({ start, end }) => isInRange(hour, start, end));
+  const block = schedule.find(({ start, end }) => isInRange(hour, start, end));
   const el = $('currentActivity');
   if (!block || !el) return;
 
@@ -233,18 +204,16 @@ function findNextSwitch(now, offset) {
 
 function updateDaylightStatus(now, actualOffset) {
   if (now.valueOf() >= nextSwitch) nextSwitch = findNextSwitch(now, actualOffset);
-  const minutes = Math.ceil((nextSwitch - now.valueOf()) / 60000);
-  const days = Math.floor(minutes / 1440);
-  const hours = Math.floor(minutes % 1440 / 60);
+  const days = Math.ceil((nextSwitch - now.valueOf()) / 86400000);
   const daylight = actualOffset === -420;
   const date = dayjs(nextSwitch).tz(TIMEZONES.pt.tz).format('MMM D');
-  const remaining = `${days}d ${hours}h ${minutes % 60}m`;
+  const remaining = `${days} ${days === 1 ? 'day' : 'days'}`;
   const nextState = daylight ? 'off' : 'on';
   const select = $('daylightMode');
   const labels = [
-    `DST ${daylight ? 'on' : 'off'} · ${nextState} in ${remaining}`,
-    `Preview PDT · live switch in ${remaining}`,
-    `Preview PST · live switch in ${remaining}`
+    `DST ${daylight ? 'on' : 'off'} - switching in ${remaining}`,
+    `Preview DST on - live switch in ${remaining}`,
+    `Preview DST off - live switch in ${remaining}`
   ];
   labels.forEach((label, i) => {
     if (select.options[i].textContent !== label) select.options[i].textContent = label;
@@ -275,9 +244,10 @@ function updateClocks() {
   const mode = $('daylightMode').value;
   const ptNow = mode === 'auto' ? actual : now.utc().utcOffset(mode === 'on' ? -420 : -480);
   const offset = ptNow.utcOffset();
-  drawClock($('clockPT'), ptNow, offset);
-  drawClock($('clockKST'), now.tz(TIMEZONES.kst.tz), offset);
-  updateCurrentActivity(now, ptNow, mode);
+  const schedule = scheduleForPacificOffset(offset);
+  drawClock($('clockPT'), ptNow, offset, schedule);
+  drawClock($('clockKST'), now.tz(TIMEZONES.kst.tz), offset, schedule);
+  updateCurrentActivity(now, ptNow, mode, schedule);
   updateDaylightStatus(now, actual.utcOffset());
 }
 
@@ -318,10 +288,10 @@ function convertTime() {
   $('convertResult').textContent = resultStr + dayStr;
 }
 
-function renderLegend() {
+function renderLegend(schedule) {
   const legend = $('scheduleLegend');
-  const unique = SCHEDULE.filter((item, index) => (
-    SCHEDULE.findIndex(candidate => candidate.name === item.name) === index
+  const unique = schedule.filter((item, index) => (
+    schedule.findIndex(candidate => candidate.name === item.name) === index
   ));
   legend.innerHTML = unique.map(item => `
     <span class="flex items-center whitespace-nowrap">
@@ -335,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ['fromTz', 'toTz'].forEach(id => $(id).addEventListener('change', convertTime));
   $('fromTime').addEventListener('input', convertTime);
   $('daylightMode').addEventListener('change', updateClocks);
-  renderLegend();
+  renderLegend(scheduleForPacificOffset(dayjs().tz(TIMEZONES.pt.tz).utcOffset()));
   populateDropdowns();
   $('fromTime').value = dayjs().tz(TIMEZONES.pt.tz).format('HH:mm');
   updateClocks();
