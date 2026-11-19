@@ -29,9 +29,8 @@ function scheduleForPacificOffset(offsetMinutes) {
     { name: 'Sleep', start: 18, end: 22, color: ACTIVITY_COLORS.sleep },
     { name: 'Free time', start: 22, end: dinner, color: ACTIVITY_COLORS.free },
     { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
-    { name: 'Free time', start: dinner + 1, end: 5, color: ACTIVITY_COLORS.free },
-    { name: 'Sleep', start: 5, end: 9, color: ACTIVITY_COLORS.sleep },
-    { name: 'Free time', start: 9, end: 10, color: ACTIVITY_COLORS.free }
+    { name: 'Free time', start: dinner + 1, end: 6, color: ACTIVITY_COLORS.free },
+    { name: 'Sleep', start: 6, end: 10, color: ACTIVITY_COLORS.sleep }
   ];
 }
 
