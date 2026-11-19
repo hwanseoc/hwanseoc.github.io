@@ -238,9 +238,18 @@ function updateDaylightStatus(now, actualOffset) {
   const hours = Math.floor(minutes % 1440 / 60);
   const daylight = actualOffset === -420;
   const date = dayjs(nextSwitch).tz(TIMEZONES.pt.tz).format('MMM D');
-  $('daylightStatus').textContent = daylight ? 'DST on · PDT' : 'DST off · PST';
-  $('switchDate').textContent = `Pacific DST ${daylight ? 'off' : 'on'} ${date}`;
-  $('switchCountdown').textContent = `in ${days}d ${hours}h ${minutes % 60}m`;
+  const remaining = `${days}d ${hours}h ${minutes % 60}m`;
+  const nextState = daylight ? 'off' : 'on';
+  const select = $('daylightMode');
+  const labels = [
+    `DST ${daylight ? 'on' : 'off'} · ${nextState} in ${remaining}`,
+    `Preview PDT · live switch in ${remaining}`,
+    `Preview PST · live switch in ${remaining}`
+  ];
+  labels.forEach((label, i) => {
+    if (select.options[i].textContent !== label) select.options[i].textContent = label;
+  });
+  select.title = `Pacific DST switches ${nextState} on ${date}. Select to preview PDT or PST.`;
 }
 
 function updateClocks() {
