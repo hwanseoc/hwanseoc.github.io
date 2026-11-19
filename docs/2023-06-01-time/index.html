@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
-  <script src="/2023-06-01-time/script.js?v=pt-compact" defer></script>
+  <script src="/2023-06-01-time/script.js?v=dst-pill" defer></script>
 </head>
 
 <body class="bg-[#0f1411] text-[#f4f1ea]">
@@ -34,12 +34,11 @@
         <div id="currentActivity" class="mt-4 w-fit max-w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-center text-sm font-medium text-[#f4f1ea]"></div>
         <div id="scheduleLegend" class="mt-4 grid justify-center gap-x-4 gap-y-2 text-sm" style="grid-template-columns:repeat(3,max-content)"></div>
         <div class="mt-4 w-full text-sm" style="border-top:1px solid #2a332d;padding-top:0.75rem">
-          <div class="flex items-center justify-between gap-3">
-            <label for="daylightMode" class="font-semibold">Pacific DST <span id="daylightStatus" class="text-[#a8b0a8]"></span></label>
-            <select id="daylightMode" aria-label="Pacific daylight saving schedule preview" class="rounded border border-[#2a332d] bg-[#111611] px-3 py-2">
-              <option value="auto">Auto</option>
-              <option value="on">Preview PDT</option>
-              <option value="off">Preview PST</option>
+          <div style="text-align:center">
+            <select id="daylightMode" aria-label="Pacific daylight saving mode" title="Pacific daylight saving mode" style="border:1px solid #435148;border-radius:999px;background:#202a23;color:#e0ebe3;padding:2px 6px;font:inherit;font-size:12px;cursor:pointer">
+              <option id="daylightStatus" value="auto">Auto</option>
+              <option value="on">Preview on</option>
+              <option value="off">Preview off</option>
             </select>
           </div>
           <p class="flex items-center justify-between gap-3 text-[#a8b0a8]" style="margin-top:0.5rem;font-size:0.8rem">
