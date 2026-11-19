@@ -22,15 +22,17 @@ const ACTIVITY_COLORS = {
 };
 
 function scheduleForPacificOffset(offsetMinutes) {
-  // Convert the fixed 18:00 Seoul dinner to Pacific time.
-  const dinner = 18 - 9 + offsetMinutes / 60;
+  const seoulToPacific = hour => (hour - 9 + offsetMinutes / 60 + 24) % 24;
+  const wake = seoulToPacific(13);
+  const dinner = seoulToPacific(18);
+  const bedtime = seoulToPacific(21);
   return [
     { name: 'Work', start: 10, end: 18, color: ACTIVITY_COLORS.work },
-    { name: 'Sleep', start: 18, end: 22, color: ACTIVITY_COLORS.sleep },
-    { name: 'Free time', start: 22, end: dinner, color: ACTIVITY_COLORS.free },
+    { name: 'Sleep', start: 18, end: wake, color: ACTIVITY_COLORS.sleep },
+    { name: 'Free time', start: wake, end: dinner, color: ACTIVITY_COLORS.free },
     { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
-    { name: 'Free time', start: dinner + 1, end: 6, color: ACTIVITY_COLORS.free },
-    { name: 'Sleep', start: 6, end: 10, color: ACTIVITY_COLORS.sleep }
+    { name: 'Free time', start: dinner + 1, end: bedtime, color: ACTIVITY_COLORS.free },
+    { name: 'Sleep', start: bedtime, end: 10, color: ACTIVITY_COLORS.sleep }
   ];
 }
 
