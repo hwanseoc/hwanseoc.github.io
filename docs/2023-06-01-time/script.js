@@ -26,44 +26,44 @@ const ACTIVITY_COLORS = {
 const SCHEDULE = [
   {
     name: 'Work',
-    start: 5,
-    end: 12,
+    start: 13,
+    end: 20,
     color: ACTIVITY_COLORS.work
   },
   {
     name: 'Lunch',
-    start: 12,
-    end: 13,
+    start: 20,
+    end: 21,
     color: ACTIVITY_COLORS.lunch
   },
   {
     name: 'Free time',
-    start: 13,
-    end: 18,
+    start: 21,
+    end: 2,
     color: ACTIVITY_COLORS.free
   },
   {
     name: 'Dinner',
-    start: 18,
-    end: 19,
+    start: 2,
+    end: 3,
     color: ACTIVITY_COLORS.dinner
   },
   {
     name: 'Free time',
-    start: 19,
-    end: 20,
+    start: 3,
+    end: 4,
     color: ACTIVITY_COLORS.free
   },
   {
     name: 'Wind down',
-    start: 20,
-    end: 21,
+    start: 4,
+    end: 5,
     color: ACTIVITY_COLORS.windDown
   },
   {
     name: 'Sleep',
-    start: 21,
-    end: 5,
+    start: 5,
+    end: 13,
     color: ACTIVITY_COLORS.sleep
   }
 ];
@@ -141,9 +141,9 @@ function drawArc(parent, startHour, endHour, color) {
   }));
 }
 
-function drawTimeRange(el, startKST, endKST, color, diff) {
-  let start = (startKST + diff) % 24;
-  let end = (endKST + diff) % 24;
+function drawTimeRange(el, startPT, endPT, color, diff) {
+  let start = (startPT + diff) % 24;
+  let end = (endPT + diff) % 24;
   if (start < 0) start += 24;
   if (end < 0) end += 24;
   if (end < start) {
@@ -154,13 +154,11 @@ function drawTimeRange(el, startKST, endKST, color, diff) {
   }
 }
 
-function drawClock(el, tz, now) {
+function drawClock(el, tzNow, pacificOffset) {
   el.innerHTML = '';
   const { cx, cy, r, bg, inner, tick, text, hand } = CLOCK;
 
-  const kstOffset = now.tz(TIMEZONES.kst.tz).utcOffset() / 60;
-  const thisOffset = now.tz(tz).utcOffset() / 60;
-  const diff = thisOffset - kstOffset;
+  const diff = (tzNow.utcOffset() - pacificOffset) / 60;
 
   el.appendChild(svg('circle', { cx, cy, r, fill: bg }));
 
@@ -187,7 +185,6 @@ function drawClock(el, tz, now) {
     }
   }
 
-  const tzNow = now.tz(tz);
   const currentHour = tzNow.hour() + tzNow.minute() / 60;
   const handAngle = hourToRad(currentHour);
   el.appendChild(svg('line', {
@@ -203,17 +200,57 @@ function isInRange(hour, start, end) {
   return hour >= start || hour < end;
 }
 
-function updateCurrentActivity(now) {
+function updateCurrentActivity(now, ptNow, mode) {
   const current = now.tz(TIMEZONES.kst.tz);
-  const hour = current.hour() + current.minute() / 60 + current.second() / 3600;
+  const hour = ptNow.hour() + ptNow.minute() / 60;
   const block = SCHEDULE.find(({ start, end }) => isInRange(hour, start, end));
   const el = $('currentActivity');
   if (!block || !el) return;
 
-  const ptNow = now.tz(TIMEZONES.pt.tz);
-  el.innerHTML = `<span class="font-semibold" style="color: ${block.color}">${block.name}</span> now: ${current.format('HH:mm')} KST / ${ptNow.format('HH:mm')} ${zoneAbbr(TIMEZONES.pt, now)}`;
+  const label = ptNow.utcOffset() === -420 ? 'PDT' : 'PST';
+  const context = mode === 'auto' ? 'now' : 'preview';
+  el.innerHTML = `<span class="font-semibold" style="color: ${block.color}">${block.name}</span> ${context}: ${current.format('HH:mm')} KST / ${ptNow.format('HH:mm')} ${label}`;
 }
 
+let nextSwitch = 0;
+
+function findNextSwitch(now, offset) {
+  // Search the Pacific zone rules, then narrow the first offset change to a minute.
+  let low = Math.floor(now.valueOf() / 60000);
+  let high = low + 7 * 24 * 60;
+  const offsetAt = minute => dayjs(minute * 60000).tz(TIMEZONES.pt.tz).utcOffset();
+  while (offsetAt(high) === offset) {
+    low = high;
+    high += 7 * 24 * 60;
+  }
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (offsetAt(mid) === offset) low = mid;
+    else high = mid;
+  }
+  return high * 60000;
+}
+
+function updateDaylightStatus(now, actualOffset) {
+  if (now.valueOf() >= nextSwitch) nextSwitch = findNextSwitch(now, actualOffset);
+  const minutes = Math.ceil((nextSwitch - now.valueOf()) / 60000);
+  const days = Math.floor(minutes / 1440);
+  const hours = Math.floor(minutes % 1440 / 60);
+  const daylight = actualOffset === -420;
+  const date = dayjs(nextSwitch).tz(TIMEZONES.pt.tz).format('MMM D, YYYY');
+  $('daylightStatus').textContent = `Pacific daylight saving is ${daylight ? 'on (PDT)' : 'off (PST)'}. Switches ${daylight ? 'off' : 'on'} in ${days}d ${hours}h ${minutes % 60}m · ${date} PT`;
+}
+
+function renderSchedule(offset) {
+  const format = hour => String((hour + 24) % 24).padStart(2, '0') + ':00';
+  const difference = 9 - offset / 60;
+  $('schedulePT').textContent = offset === -420 ? 'PDT' : 'PST';
+  $('scheduleRows').innerHTML = SCHEDULE.map(({ name, start, end }) =>
+    `<tr><td>${name}</td><td>${format(start)}–${format(end)}</td><td>${format(start + difference)}–${format(end + difference)}</td></tr>`
+  ).join('');
+}
+
+let displayedOffset;
 function updateClocks() {
   const now = dayjs();
 
@@ -233,9 +270,18 @@ function updateClocks() {
     });
   });
 
-  drawClock($('clockPT'), TIMEZONES.pt.tz, now);
-  drawClock($('clockKST'), TIMEZONES.kst.tz, now);
-  updateCurrentActivity(now);
+  const actual = now.tz(TIMEZONES.pt.tz);
+  const mode = $('daylightMode').value;
+  const ptNow = mode === 'auto' ? actual : now.utc().utcOffset(mode === 'on' ? -420 : -480);
+  const offset = ptNow.utcOffset();
+  drawClock($('clockPT'), ptNow, offset);
+  drawClock($('clockKST'), now.tz(TIMEZONES.kst.tz), offset);
+  updateCurrentActivity(now, ptNow, mode);
+  updateDaylightStatus(now, actual.utcOffset());
+  if (displayedOffset !== offset) {
+    renderSchedule(offset);
+    displayedOffset = offset;
+  }
 }
 
 function populateDropdowns() {
@@ -291,6 +337,7 @@ function renderLegend() {
 document.addEventListener('DOMContentLoaded', () => {
   ['fromTz', 'toTz'].forEach(id => $(id).addEventListener('change', convertTime));
   $('fromTime').addEventListener('input', convertTime);
+  $('daylightMode').addEventListener('change', updateClocks);
   renderLegend();
   populateDropdowns();
   $('fromTime').value = dayjs().tz(TIMEZONES.pt.tz).format('HH:mm');

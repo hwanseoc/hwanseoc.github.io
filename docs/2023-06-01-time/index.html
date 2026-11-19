@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
-  <script src="/2023-06-01-time/script.js" defer></script>
+  <script src="/2023-06-01-time/script.js?v=pt-schedule" defer></script>
 </head>
 
 <body class="bg-[#0f1411] text-[#f4f1ea]">
@@ -33,6 +33,19 @@
         </div>
         <div id="currentActivity" class="mt-4 w-fit max-w-full rounded border border-[#2a332d] bg-[#111611] px-3 py-2 text-center text-sm font-medium text-[#f4f1ea]"></div>
         <div id="scheduleLegend" class="mt-4 grid w-full max-w-full grid-cols-[repeat(5,max-content)] justify-center gap-x-4 gap-y-2 px-1 text-sm max-[640px]:grid-cols-[repeat(3,max-content)] max-[640px]:gap-x-3 max-[640px]:text-[0.8rem]"></div>
+        <div class="mt-4 w-full text-sm">
+          <label for="daylightMode" class="font-semibold">Schedule daylight saving</label>
+          <select id="daylightMode" class="rounded border border-[#2a332d] bg-[#111611] px-3 py-2">
+            <option value="auto">Auto (live)</option>
+            <option value="on">On (PDT preview)</option>
+            <option value="off">Off (PST preview)</option>
+          </select>
+          <p id="daylightStatus" class="mt-4 text-[#a8b0a8]"></p>
+          <table class="mt-4 w-full text-sm" style="text-align:left; font-variant-numeric:tabular-nums">
+            <thead><tr><th>Activity</th><th id="schedulePT">PT</th><th>KST</th></tr></thead>
+            <tbody id="scheduleRows"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
