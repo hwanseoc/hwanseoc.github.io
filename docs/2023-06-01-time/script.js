@@ -16,7 +16,6 @@ const TZ_BY_IANA = Object.fromEntries(
 
 const ACTIVITY_COLORS = {
   work: '#f472b6',
-  lunch: '#f59e0b',
   free: '#34d399',
   dinner: '#fb7185',
   windDown: '#67e8f9',
@@ -24,18 +23,16 @@ const ACTIVITY_COLORS = {
 };
 
 function scheduleForPacificOffset(offsetMinutes) {
-  // Meals follow Seoul time. Work starts and sleep ends at 13:00 Pacific.
-  const seoulToPacific = hour => (hour - 9 + offsetMinutes / 60 + 24) % 24;
-  const lunch = seoulToPacific(12);
-  const dinner = seoulToPacific(18);
+  // Convert the fixed 18:00 Seoul dinner to Pacific time.
+  const dinner = 18 - 9 + offsetMinutes / 60;
   return [
-    { name: 'Work', start: 13, end: lunch, color: ACTIVITY_COLORS.work },
-    { name: 'Lunch', start: lunch, end: lunch + 1, color: ACTIVITY_COLORS.lunch },
-    { name: 'Free time', start: lunch + 1, end: dinner, color: ACTIVITY_COLORS.free },
+    { name: 'Work', start: 9, end: 18, color: ACTIVITY_COLORS.work },
+    { name: 'Sleep', start: 18, end: 22, color: ACTIVITY_COLORS.sleep },
+    { name: 'Free time', start: 22, end: dinner, color: ACTIVITY_COLORS.free },
     { name: 'Dinner', start: dinner, end: dinner + 1, color: ACTIVITY_COLORS.dinner },
     { name: 'Free time', start: dinner + 1, end: 4, color: ACTIVITY_COLORS.free },
     { name: 'Wind down', start: 4, end: 5, color: ACTIVITY_COLORS.windDown },
-    { name: 'Sleep', start: 5, end: 13, color: ACTIVITY_COLORS.sleep }
+    { name: 'Sleep', start: 5, end: 9, color: ACTIVITY_COLORS.sleep }
   ];
 }
 
